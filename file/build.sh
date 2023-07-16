@@ -1,17 +1,17 @@
 
 #!/bin/bash
-# main build
+# file build
 
 API_name=""
 
 function build_part(){
     echo "build $API_name"
-    rm ./build/$API_name.o
-    gcc $API_name.c -g -o $API_name.o -I./file -I./
-    if [ ! -d "./build" ]; then
-        mkdir ./build
+    rm ../build/$API_name.o
+    gcc $API_name.c -g -o $API_name.o -I../ -I./
+    if [ ! -d "../build" ]; then
+        mkdir ../build
     fi
-    mv $API_name.o ./build/
+    mv $API_name.o ../build/
 }
 
 # file
@@ -55,11 +55,6 @@ function run_link() {
     ../build/LinuxLink.o 
 }
 
-function build_main() {
-    API_name="main"
-    build_part
-}
-
 function usage()
 {
     echo "usage"
@@ -76,8 +71,8 @@ function usage()
 # 攻击函数
 do_build() {
     case $type in
-		19)
-			build_main
+		1)
+			build_fileIO
 			;;
 		2)
 			run_fileIO

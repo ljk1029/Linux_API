@@ -1,42 +1,47 @@
+/*
+ * 文件名: LinuxFileIO.c
+ * 作者: ljk
+ * 创建时间: 2023-07-15
+ * 文件描述: 文件IO读写操作例程
+ */
+// 0、1 和 2 标准输入、标准输出和标准错误
 #include "common.h"
 
-#define TEST_DIR_PATH   "/mnt/hgfs/MyWork/github/API"
-#define TEST_FILE_NAME  TEST_DIR_PATH "/" "a.txt"
 
-
-int fun_write_test()
+// 文件权限确认
+int fun_access(const char* path)
 {
-    char c;
-    int in, out;
-    in  = open("file.in", O_RDONLY);
-    out = open("file.out", O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
+    const char* file_path = path;
 
-    while(read(in, &c, 1) == 1)
-        write(out, &c, 1);
+    if (access(file_path, R_OK|W_OK|X_OK|F_OK) != 0) {
+        perror("access");
+    }
     
     return 0;
 }
 
-// open read write close ioctl
-// 0、1 和 2 标准输入、标准输出和标准错误
-int fun_write()
+// 文件IO写
+int fun_write(const char* path, const char* data)
 {
-    int fd; // 文件描述符
+    const char* file_path = path;
+    const char* file_data = data;
+    int fd; 
 
     // 打开文件（如果不存在则创建），返回文件描述符
-    fd = open(TEST_FILE_NAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+    fd = open(file_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fd == -1) {
         perror("open");
         exit(1);
     }
 
     // 写入数据到文件
-    const char* data = "Hello, World!";
-    if (write(fd, data, sizeof("Hello, World!")) == -1) {
+    if (write(fd, file_data, strlen(file_data)) == -1) {
         perror("write");
         exit(1);
-    } 
+    }
 
+    printf("write: %s, len: %ld\n", file_data, strlen(file_data));
+    
      // 刷新缓冲区并将数据写入磁盘 == fflush
     if (fsync(fd) == -1) {
         perror("fsync");
@@ -52,13 +57,15 @@ int fun_write()
     return 0;
 }
 
-int fun_read()
+// 文件IO读
+int fun_read(const char* path)
 {
-    int fd; // 文件描述符
-    char buffer[256]; // 缓冲区用于读取和写入文件
-
+    const char* file_path = path;
+    char buffer[256];
+    int fd; 
+     
     // 重新打开文件进行读取
-    fd = open(TEST_FILE_NAME, O_RDONLY);
+    fd = open(file_path, O_RDONLY);
     if (fd == -1) {
         perror("open");
         exit(1);
@@ -70,10 +77,9 @@ int fun_read()
         perror("read");
         exit(1);
     }
-
-    // 打印读取的数据
-    printf("Data read from file: %.*s\n", (int)bytesRead, buffer);
-
+    
+    printf("read: %s, len: %d\n", buffer, (int)bytesRead);
+    
     // 关闭文件
     if (close(fd) == -1) {
         perror("close");
@@ -83,12 +89,14 @@ int fun_read()
     return 0;
 }
 
-int fun_lseek()
+// 文件lseek
+int fun_lseek(const char* path)
 {
-    int fd; // 文件描述符
+    const char* file_path = path;
+    int fd; 
 
     // 打开文件（如果不存在则创建），返回文件描述符
-    fd = open(TEST_FILE_NAME, O_RDONLY);
+    fd = open(file_path, O_RDONLY);
     if (fd == -1) {
         perror("open");
         exit(1);
@@ -101,7 +109,7 @@ int fun_lseek()
         exit(1);
     }
 
-    printf("New file offset: %lld\n", (long long)newOffset);
+    printf("lseek: %lld\n", (long long)newOffset);
 
     // 关闭文件
     if (close(fd) == -1) {
@@ -112,14 +120,15 @@ int fun_lseek()
     return 0;
 }
 
-// int fstat(int fd, struct stat *buf);  fd是描述符
+// int fstat(int fd, struct stat *buf);            fd是描述符
 // int lstat(const char *path, struct stat *buf);  是指软连接
-int fun_stat()
+// 文件stat
+int fun_stat(const char* path)
 {
-    printf("*** test file stat ***\n");
+    const char* file_path = path;
     struct stat fileStat;
 
-    if (stat(TEST_FILE_NAME, &fileStat) == -1) {
+    if (stat(file_path, &fileStat) == -1) {
         perror("stat");
         return 1;
     }
@@ -132,13 +141,14 @@ int fun_stat()
     return 0;
 }
 
-int fun_dup()
+// 文件dup
+int fun_dup(const char* path)
 {
-    printf("*** test file dup ***\n");
+    const char* file_path = path;
     int fd1, fd2, fd3;
 
     // 打开文件 example.txt，并获取文件描述符 fd1
-    fd1 = open(TEST_FILE_NAME, O_RDONLY);
+    fd1 = open(file_path, O_RDONLY);
     if (fd1 == -1) {
         perror("open");
         return 1;
@@ -160,36 +170,35 @@ int fun_dup()
         close(fd2);
         return 1;
     }
-
-    printf("fd1: %d\n", fd1);
-    printf("fd2: %d\n", fd2);
-    printf("fd3: %d\n", fd3);
-
     close(fd1);
     close(fd2);
     close(fd3);
 
+    printf("fd1:  %d\n", fd1);
+    printf("dup:  %d\n", fd2);
+    printf("dup2: %d\n", fd3);
+
     return 0;
 }
 
-#include <fcntl.h>
-#include <sys/ioctl.h>
-// 
-int fun_ioctl()
+// 驱动命令
+int fun_ioctl(const char* dev, unsigned long cmd)
 {
-    printf("*** test file ioctl ***\n");
-     int fd;  // 设备文件描述符
-    int ret; // 返回值
+    int fd = -1;  
+    int ret = -1; 
+    int status = 0;
+    const char* device = dev;
+    unsigned long commod = cmd;
 
     // 打开设备文件
-    fd = open("/dev/device", O_RDWR);
+    fd = open(device, O_RDWR);
     if (fd == -1) {
         perror("open");
         return 1;
     }
 
     // 发送一个控制命令
-    //ret = ioctl(fd, IOCTL_COMMAND, arg);
+    ret = ioctl(fd, commod, &status);
     if (ret == -1) {
         perror("ioctl");
         close(fd);
@@ -204,11 +213,25 @@ int fun_ioctl()
 
 int main(int argc, char* argv[])
 {
-    fun_write();
-    fun_read();
-    fun_lseek();
-    fun_stat();
-    fun_dup();
+    const char* path = API_FILE_NAME;
+    const char* data = "Hello, World!";
+
+    printf("__[fun_write() test]__\n");
+    fun_write(path, data);
+
+    printf("__[fun_read() test]__\n");
+    fun_read(path);
+
+    printf("__[fun_lseek() test]__\n");
+    fun_lseek(path);
+
+    printf("__[fun_stat() test]__\n");
+    fun_stat(path);
+
+    printf("__[fun_dup() test]__\n");
+    fun_dup(path);
+
+    fun_access(path);
 
     return 0;
 }
