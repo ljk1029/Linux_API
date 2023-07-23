@@ -16,6 +16,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+#include <sys/wait.h>
 
 
 
@@ -27,12 +28,12 @@ extern "C" {
 #include <stdint.h>
 #include <limits.h>
 
-
+#if 0
 #include "LinuxDir.h"
 #include "LinuxFile.h"
 #include "LinuxFileIO.h"
 #include "LinuxLink.h"
-
+#endif
 
 #ifdef __cplusplus
 }

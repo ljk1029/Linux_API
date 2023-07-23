@@ -3,15 +3,16 @@
 # file build
 
 API_name=""
+build_path=../build
 
 function build_part(){
     echo "build $API_name"
-    rm ../build/$API_name.o
+    rm $build_path/$API_name.o
     gcc $API_name.c -g -o $API_name.o -I../ -I./
-    if [ ! -d "../build" ]; then
-        mkdir ../build
+    if [ ! -d "$build_path" ]; then
+        mkdir $build_path
     fi
-    mv $API_name.o ../build/
+    mv $API_name.o $build_path/
 }
 
 # file
@@ -22,7 +23,7 @@ function build_fileIO() {
 
 function run_fileIO() {
     echo "run fileIO"
-    ../build/LinuxFileIO.o 
+    $build_path/LinuxFileIO.o 
 }
 
 function build_file() {
@@ -32,7 +33,7 @@ function build_file() {
 
 function run_file() {
     echo "run file"
-    ../build/LinuxFile.o 
+    $build_path/LinuxFile.o 
 }
 
 function build_dir() {
@@ -42,7 +43,7 @@ function build_dir() {
 
 function run_dir() {
     echo "run dir"
-    ../build/LinuxDir.o 
+    $build_path/LinuxDir.o 
 }
 
 function build_link() {
@@ -52,7 +53,7 @@ function build_link() {
 
 function run_link() {
     echo "run link"
-    ../build/LinuxLink.o 
+    $build_path/LinuxLink.o 
 }
 
 function usage()
