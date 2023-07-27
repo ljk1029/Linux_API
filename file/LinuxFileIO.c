@@ -181,36 +181,6 @@ int fun_dup(const char* path)
     return 0;
 }
 
-// 驱动命令
-int fun_ioctl(const char* dev, unsigned long cmd)
-{
-    int fd = -1;  
-    int ret = -1; 
-    int status = 0;
-    const char* device = dev;
-    unsigned long commod = cmd;
-
-    // 打开设备文件
-    fd = open(device, O_RDWR);
-    if (fd == -1) {
-        perror("open");
-        return 1;
-    }
-
-    // 发送一个控制命令
-    ret = ioctl(fd, commod, &status);
-    if (ret == -1) {
-        perror("ioctl");
-        close(fd);
-        return 1;
-    }
-
-    // 关闭设备文件
-    close(fd);
-
-    return 0;
-}
-
 int main(int argc, char* argv[])
 {
     const char* path = API_FILE_NAME;

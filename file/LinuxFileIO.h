@@ -16,8 +16,6 @@ int fun_lseek(const char* path);
 int fun_stat(const char* path);
 // 文件dup
 int fun_dup(const char* path);
-// 驱动命令
-int fun_ioctl(const char* dev, unsigned long cmd);
 
 #ifdef __cplusplus
 }

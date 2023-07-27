@@ -1,19 +1,29 @@
-#include <stdio.h> 
-#include <stdarg.h>
+/*
+ * 文件名: LinuxLog.c
+ * 作者: ljk
+ * 创建时间: 2023-07-25
+ * 文件描述: va_list用法
+ */
+#include "../common.h"
 
+
+// 打印等级
 #define PRINT_ERROR            3
 #define PRINT_INFO             2
 #define PRINT_DEBUG            1
-#define SWITCH_DEBUG_PRINT     0
+#define SWITCH_DEBUG_PRINT     0  // 打印等级开关
 
 static int print_level = SWITCH_DEBUG_PRINT;
 
+
+// 初始化打印
 int init_print(int level)
 {
     print_level = level;
     return print_level;
 }
 
+// 打印
 void log_print(int level, const char *msg, ...)
 {
     #define LOG_BUF_SIZE           (1024)
@@ -27,9 +37,9 @@ void log_print(int level, const char *msg, ...)
     va_end(ap);
 
     if(PRINT_ERROR == level){
-        fprintf(stderr,message);
+        fprintf(stderr, "%s", message);
     }
     else{
-        fprintf(stdout,message);
+        fprintf(stdout, "%s", message);
     }
 }

@@ -136,9 +136,8 @@ int fun_dir(const char *path)
 #endif
 }
 
-#define LINK_FILE_NAME  "link.txt"
-#define LINK_DIR_NAME   "/mnt/hgfs/MyWork/github/API/link_dir"
 
+// 测试例程
 int main(int argc, char* argv[])
 {
     const char *path = LINK_FILE_NAME; 
