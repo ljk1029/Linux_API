@@ -1,8 +1,8 @@
 /*
- * 文件名: LinuxProcess.c
+ * 文件名: LinuxProcessEx.c
  * 作者: ljk
  * 创建时间: 2023-07-23
- * 文件描述: 进程开启子进程例程
+ * 文件描述: 进程开启shell子进程例程
  */
 #include "../common.h"
 

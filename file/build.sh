@@ -70,6 +70,20 @@ function run_fcntl() {
     $build_path/$API_name.o
 }
 
+# 构建
+function build_temp()
+{
+    API_name=LinuxTemp
+    build_part
+}
+
+# 运行
+function run_temp() {
+    API_name=LinuxTemp
+    echo "run $API_name"
+    $build_path/$API_name.o
+}
+
 
 function usage()
 {
@@ -84,6 +98,8 @@ function usage()
 	echo '8  run_link'
     echo '9  build_fcntl'
 	echo '10 run_fcntl'
+	echo '11 build_temp'
+	echo '12 run_temp'
 }
 
 # 攻击函数
@@ -118,6 +134,12 @@ do_build() {
 			;;
         10)
 			run_fcntl
+			;;
+        11)
+			build_temp
+			;;
+        12)
+			run_temp
 			;;
 		*)
             usage

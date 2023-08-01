@@ -38,11 +38,50 @@ getopt_long_only 可以混合
 #include <getopt.h>
 
 
+// getopt
+// 测试用例 ./a.out -a --b option_value
+int fun_getopt(int argc, char* argv[])
+{
+    int opt;
+    int option_a = 0;
+    char *option_b = NULL;
 
+    while ((opt = getopt(argc, argv, "ab:")) != -1) {
+        switch (opt) {
+            case 'a':
+                option_a = 1;
+                break;
+            case 'b':
+                option_b = optarg;
+                break;
+            case '?':
+                fprintf(stderr, "Unknown option: -%c\n", optopt);
+                return 1;
+            case ':':
+                fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+                return 1;
+            default:
+                break;
+        }
+    }
 
-#if 0
-// getopt_long   ./a.out -a  --option_b=vlua
-int main(int argc, char *argv[]) {
+    printf("Option a: %d\n", option_a);
+    printf("Option b: %s\n", option_b);
+
+    if (optind < argc) {
+        printf("Non-option arguments:\n");
+        for (int i = optind; i < argc; i++) {
+            printf("%s\n", argv[i]);
+        }
+    }
+
+    return 0;
+}
+
+// getopt_long  
+// 测试用例 ./a.out -a  --option_b=vlua
+int fun_getopt_long(int argc, char* argv[])
+{
     int opt;
     int option_a = 0;
     char *option_b = NULL;
@@ -83,51 +122,10 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-
-#elif 0
-// getopt ./a.out -a --b option_value
-int main(int argc, char* argv[])
+// getopt_long_only  
+// 测试用例 ./a.out -b vlua 或 ./a.out --option_b=vlua
+int fun_getopt_long_only(int argc, char* argv[])
 {
-    int opt;
-    int option_a = 0;
-    char *option_b = NULL;
-
-    while ((opt = getopt(argc, argv, "ab:")) != -1) {
-        switch (opt) {
-            case 'a':
-                option_a = 1;
-                break;
-            case 'b':
-                option_b = optarg;
-                break;
-            case '?':
-                fprintf(stderr, "Unknown option: -%c\n", optopt);
-                return 1;
-            case ':':
-                fprintf(stderr, "Option -%c requires an argument.\n", optopt);
-                return 1;
-            default:
-                break;
-        }
-    }
-
-    printf("Option a: %d\n", option_a);
-    printf("Option b: %s\n", option_b);
-
-    if (optind < argc) {
-        printf("Non-option arguments:\n");
-        for (int i = optind; i < argc; i++) {
-            printf("%s\n", argv[i]);
-        }
-    }
-
-    return 0;
-}
-
-
-#else
-// getopt_long_only  ./a.out -b vlua 或 ./a.out --option_b=vlua
-int main(int argc, char *argv[]) {
     int opt;
     int option_a = 0;
     char* option_b = NULL;
@@ -168,4 +166,15 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+
+// 测试程序
+int main(int argc, char *argv[]) 
+{
+#if 1
+    fun_getopt(argc, argv);
+#elif 1
+    fun_getopt_long(argc, argv);
+#else
+    fun_getopt_long_only(argc, argv);
 #endif
+}

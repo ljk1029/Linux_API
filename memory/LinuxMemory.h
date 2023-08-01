@@ -5,7 +5,7 @@ extern "C" {
 #endif
 
 // 将文件映射到内存
-int fun_mmap(int fd, long size);
+int fun_mmap(int fd, long size, const char* data);
 
 #ifdef __cplusplus
 }

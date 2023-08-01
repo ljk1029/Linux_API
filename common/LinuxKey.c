@@ -6,6 +6,9 @@
  */
 #include "../common.h"
 
+
+
+
 static struct termios initial_settings, new_settings;
 static int peek_character = -1;
 
@@ -65,9 +68,10 @@ int readch()
     return ch;
 }
 
-int fun_key()
+// 键盘功能
+int fun_keyboard()
 {
-     int ch = 0;
+    int ch = 0;
 
     init_keyboard();
     while(ch != 'q')
@@ -83,9 +87,11 @@ int fun_key()
     return 0;
 }
 
+
+
 // 测试例程
 int main(int argc, char* argv[])
 {
-    fun_key();
+    fun_keyboard();
     return 0;
 }

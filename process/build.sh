@@ -56,31 +56,15 @@ function run_getopt() {
     $out_path/$exe_name.o
 }
 
-# 构建
-function build_env()
-{
-    exe_name=LinuxEnv
-    build_part
-}
-
-# 运行
-function run_env() {
-    exe_name=LinuxEnv
-    echo "run $exe_name"
-    $out_path/$exe_name.o
-}
-
 
 function usage() {
     echo "[I] Usage: [sh $0 cmd]"
     echo '1   build process'
 	echo '2   run   process'
-    echo '1E  build processEx'
-	echo '2E  run   processEx'  
-    echo '3   build getopt'
-	echo '4   run   getopt'
-	echo '5   build env'
-	echo '6   run   env'
+    echo '3   build processEx'
+	echo '4   run   processEx'  
+    echo '5   build getopt'
+	echo '6   run   getopt'
 }
 
 # main
@@ -91,18 +75,14 @@ else
         build_process
     elif [ $1 == '2' ];then
         run_process
-    elif [ $1 == '1E' ]; then
+    elif [ $1 == '3' ]; then
         build_processEx
-    elif [ $1 == '2E' ];then
-        run_processEx
-    elif [ $1 == '3' ];then
-        build_getopt
     elif [ $1 == '4' ];then
-        run_getopt
+        run_processEx
     elif [ $1 == '5' ];then
-        build_env
+        build_getopt
     elif [ $1 == '6' ];then
-        run_env
+        run_getopt
     else
         usage
     fi

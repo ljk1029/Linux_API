@@ -201,6 +201,7 @@ int main(int argc, char* argv[])
     printf("__[fun_dup() test]__\n");
     fun_dup(path);
 
+    printf("__[fun_access() test]__\n");
     fun_access(path);
 
     return 0;

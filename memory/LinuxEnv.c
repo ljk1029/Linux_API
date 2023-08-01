@@ -7,6 +7,9 @@
 #include "../common.h"
 
 
+
+
+
 // getenv获取环境变量
 int fun_getenv(const char* path)
 {
@@ -94,13 +97,16 @@ int fun_showenv()
 }
 
 
+
+
+// 测试例程
 int main(int argc, char* argv[])
 {
-    printf("__[fun_getenv() test]__\n");
+    printf("__[fun_getenv()  test]__\n");
     fun_getenv("HOME"); 
-    printf("__[fun_putenv() test]__\n");
+    printf("__[fun_putenv()  test]__\n");
     fun_putenv("MY_VARIABLE", "hello"); 
-    printf("__[fun_setenv() test]__\n"); 
+    printf("__[fun_setenv()  test]__\n"); 
     fun_setenv("MY_VARIABLE", "ni hao!", 1); 
     printf("__[fun_showenv() test]__\n"); 
     fun_showenv(); 

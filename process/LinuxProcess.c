@@ -35,7 +35,7 @@ int fun_fork()
     }
 
     // 这里的代码将被父进程和子进程共同执行
-    printf("fork...\n");
+    printf("fork hello...\n");
 
     return 0;
 }
@@ -71,5 +71,6 @@ int main(int argc, char* argv[])
     fun_fork();
     printf("__[fun_getID() test]__\n");
     fun_getID();
+
     return 0;
 }

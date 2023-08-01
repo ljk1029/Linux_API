@@ -39,12 +39,14 @@ int fun_uptime()
     return 0;
 }
 
+
+
 // 测试例程
 int main(int argc, char* argv[]) 
 {
     printf("__[fun_gettimeofday() test]__\n");
     fun_gettimeofday();
-    printf("__[fun_uptime() test]__\n");
+    printf("__[fun_uptime()       test]__\n");
     fun_uptime();
     return 0;
 }
