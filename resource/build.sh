@@ -57,15 +57,15 @@ function run_resource() {
 }
 
 # 构建
-function build_env()
+function build_environ()
 {
-    exe_name=LinuxEnv
+    exe_name=LinuxEnviron
     build_part
 }
 
 # 运行
-function run_env() {
-    exe_name=LinuxEnv
+function run_environ() {
+    exe_name=LinuxEnviron
     echo "run $exe_name"
     $out_path/$exe_name.o
 }
@@ -84,6 +84,20 @@ function run_passwd() {
     $out_path/$exe_name.o
 }
 
+# 构建
+function build()
+{
+    exe_name=LinuxSyscall
+    build_part
+}
+
+# 运行
+function run_syscall() {
+    exe_name=LinuxSyscall
+    echo "run $exe_name"
+    $out_path/$exe_name.o
+}
+
 
 function usage() {
     echo "[I] Usage: [sh $0 cmd]"
@@ -93,10 +107,12 @@ function usage() {
 	echo '4   run   syslog' 
     echo '5   build resource'
 	echo '6   run   resource' 
-    echo '7   build env'
-	echo '8   run   env'
+    echo '7   build environ'
+	echo '8   run   environ'
 	echo '9   build passwd'
 	echo '10  run   passwd'
+    echo '11  build'
+	echo '12  run   syscall'
 }
 
 # main
@@ -116,13 +132,17 @@ else
     elif [ $1 == '6' ];then
         run_resource
     elif [ $1 == '7' ];then
-        build_env
+        build_environ
     elif [ $1 == '8' ];then
-        run_env
+        run_environ
     elif [ $1 == '9' ];then
         build_passwd
     elif [ $1 == '10' ];then
         run_passwd
+    elif [ $1 == '11' ];then
+        build
+    elif [ $1 == '12' ];then
+        run_syscall
     else
         usage
     fi

@@ -39,8 +39,6 @@ int fun_uptime()
     return 0;
 }
 
-
-
 // 测试例程
 int main(int argc, char* argv[]) 
 {

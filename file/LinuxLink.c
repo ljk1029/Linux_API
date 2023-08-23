@@ -137,6 +137,11 @@ int fun_dir(const char *path)
 }
 
 
+
+
+#define LINK_DIR_NAME       "/mnt/hgfs/MyWork/github/A_Linux_API/link_dir"  // 创建目录测试
+#define LINK_FILE_NAME      "link.txt"                              // 软连接测试
+
 // 测试例程
 int main(int argc, char* argv[])
 {

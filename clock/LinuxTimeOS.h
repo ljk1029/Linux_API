@@ -4,8 +4,10 @@
 extern "C" {
 #endif
 
-
-
+// gettimeofday获取当前时间
+int fun_gettimeofday();
+// 获取当前系统允许时间
+int fun_uptime();
 
 #ifdef __cplusplus
 }

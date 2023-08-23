@@ -4,46 +4,43 @@
  * 创建时间: 2023-07-25
  * 文件描述: perror用法
  */
+// 禁用 assert,必须放<assert.h>前
+#define NDEBUG
 #include "../common.h"
+#include "LinuxError.h"
 
 
-// 获取错误码 errno
+// 获取错误码, 全局变量errno
 int getErrCode()
 {
+    printf("Error code: %d\n", errno);
     return errno;
 }
 
-// 打印错误码
-int printErrCode(int err)
+// 打印错误信息, strerror
+int printErrCode()
 {
-    int errnum = errno;  // 示例错误码
+    int  errnum = errno;  
     char *error_msg = strerror(errnum);
-    printf("Error code:%d,  message: %s\n", errno, error_msg);
+    printf("Error code: %d, message: %s\n", errnum, error_msg);
     return 0;
 }
 
-// 打印错误信息 perror
+// 打印错误信息, perror
 int printErrInfo()
 {
-    perror("Error");
+    perror("Error message");
     return 0;
 }
 
-
-#include "LinuxLog.c"
-// 测试程序
-int main(int argc, char* argv[]) 
+// 断言测试assert
+int fun_assert(int a) 
 {
-    FILE *file = fopen("nonexistent.txt", "r");
-    if (file == NULL) 
-    {
-        int err = getErrCode();
-        printErrCode(err);
-        printErrInfo();
-    }
+    printf("assert test\n");
+    // 断言 b 不为 0
+    assert(a != 0);
 
-    char* str = "log_print";
-    log_print(PRINT_DEBUG, "%s test", str);
-
+    printf("input:%d\n", a);
     return 0;
 }
+

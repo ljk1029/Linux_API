@@ -8,38 +8,38 @@
 
 
 
-
-// 创建子进程
+// 父进程结束后的，子进程形成僵尸进程会把自己的父进程设为PID=1的init进程，等待init进程回收
+// 创建子进程测试
 int fun_fork()
 {
-    pid_t pid;    // 用于存储 fork 返回值，表示进程 ID
-    pid = fork(); // 创建子进程
+    pid_t pid;      // 用于存储 fork 返回值，表示进程 ID
+    pid = fork();   // 创建子进程
 
-    if (pid < 0) 
+    if (pid < 0)    // 创建子进程失败
     {
-        // 创建子进程失败
         fprintf(stderr, "Fork failed.\n");
         return 1;
     } 
-    else if (pid == 0) 
+    else if (pid == 0)   // 子进程
     {
-        // 子进程
         printf("Hello from the child process! (Child PID: %d, Parent PID: %d)\n", getpid(), getppid());
     } 
-    else 
+    else  // 父进程
     {
-        // 父进程
         printf("Hello from the parent process! (Child PID: %d)\n", pid);
-        wait(NULL); // 等待子进程结束
+        wait(NULL); // 等待子进程结束, 不然会形成僵尸进程
         printf("Child process has terminated.\n");
     }
 
-    // 这里的代码将被父进程和子进程共同执行
     printf("fork hello...\n");
-
+    /*
+    *   这里的代码将被父进程和子进程共同执行
+    */
+    
     return 0;
 }
 
+// 封装获取线程ID
 pid_t gettid(void)
 {
     return syscall(SYS_gettid);
@@ -56,7 +56,7 @@ int fun_getID()
     printf("进程ID:   %d\n", pid);
     printf("父进程ID: %d\n", ppid);
     printf("进程组ID: %d\n", pgid);
-    printf("T线程ID:  %d\n", tid);
+    printf("线程ID:  %d\n", tid);
     printf("主线程ID: %d\n", pid); // 主线程 ID 就是进程 ID
     return 0;
 }
@@ -67,7 +67,7 @@ int fun_getID()
 // 测试程序
 int main(int argc, char* argv[])
 {
-    printf("__[fun_fork() test]__\n");
+    printf("__[fun_fork()  test]__\n");
     fun_fork();
     printf("__[fun_getID() test]__\n");
     fun_getID();

@@ -196,7 +196,6 @@ int fun_mkstemp()
 }
 
 
-#ifdef LINUX_MAIN_API_TEST
 int main(int argc, char* argv[])
 {
     printf("__[fun_tmpnam() test]__\n");
@@ -216,4 +215,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-#endif

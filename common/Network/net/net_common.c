@@ -34,7 +34,7 @@ void get_local_mac(char *if_name)
 }
 
 // 获取固定地址ip地址
-static void get_local_ip(char *if_name)
+void get_local_ip(char *if_name)
 {
     char local_net_ip[32];
 
@@ -66,8 +66,8 @@ static void get_local_ip(char *if_name)
     freeifaddrs(addr);
 }
 
-#define DEMO_TEST
-#ifdef DEMO_TEST
+
+
 // 测试程序 
 int main()
 {
@@ -77,4 +77,3 @@ int main()
     get_local_ip(netcard);
     return 0;
 }
-#endif

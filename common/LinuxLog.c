@@ -5,16 +5,11 @@
  * 文件描述: va_list用法
  */
 #include "../common.h"
+#include "LinuxLog.h"
 
 
-// 打印等级
-#define PRINT_ERROR            3
-#define PRINT_INFO             2
-#define PRINT_DEBUG            1
-#define SWITCH_DEBUG_PRINT     0  // 打印等级开关
 
 static int print_level = SWITCH_DEBUG_PRINT;
-
 
 // 初始化打印
 int init_print(int level)
@@ -43,3 +38,13 @@ void log_print(int level, const char *msg, ...)
         fprintf(stdout, "%s", message);
     }
 }
+
+
+
+// 打印文件，函数，行号
+int log_debug(char* info)
+{
+    printf("%s: %s %s line %d\n", info, __FILE__, __FUNCTION__, __LINE__);
+    return 0;
+}
+

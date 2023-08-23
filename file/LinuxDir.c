@@ -36,7 +36,7 @@ int fun_finddir(char* dir, int depth)
 }
 
 // 记录文件
-int fun_seekdir(char* target) 
+int fun_seekdir(char* target, char* path_dir) 
 {
     DIR *dir;
     struct dirent *entry;
@@ -45,7 +45,7 @@ int fun_seekdir(char* target)
     char* targetFile = target; 
 
     // 打开目录
-    dir = opendir(API_DIR_PATH);
+    dir = opendir(path_dir);
     if (dir == NULL) {
         perror("opendir failed");
         return 1;
@@ -80,7 +80,10 @@ int fun_seekdir(char* target)
 }
 
 
-#ifdef LINUX_MAIN_API_TEST
+
+
+#define API_DIR_PATH        "/mnt/hgfs/MyWork/github/A_Linux_API" 
+
 int main(int argc, char* argv[])
 {
     char* dir = API_DIR_PATH;
@@ -91,8 +94,7 @@ int main(int argc, char* argv[])
 
     printf("__[fun_seekdir() test]__\n");
     char targetFile[] = "build.sh";
-    fun_seekdir(targetFile);
+    fun_seekdir(targetFile, dir);
 
     return 0;
 }
-#endif

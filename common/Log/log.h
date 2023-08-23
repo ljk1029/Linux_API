@@ -6,7 +6,7 @@ extern "C" {
 #endif
 typedef struct _log_st  
 {  
-    char path[LOG_PATH_SIZE];  
+    char path[LOG_PATH_SIZE-10];  
     int fd;  
     int size;  
     int level;  

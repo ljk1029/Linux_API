@@ -46,7 +46,7 @@ function usage()
 	echo '4  run_TimeOS'
 }
 
-# 攻击函数
+# 执行函数
 do_build() {
     case $type in
 		1)

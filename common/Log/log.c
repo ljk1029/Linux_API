@@ -17,7 +17,7 @@
 #define LOG_SAVEALLFILE     4
 #define LOG_BUF_SIZE     (1024*10)  // 每次写入最大数据量 byte
 #define LOG_FILE_SIZE    (1)     // 每个日志文件最大大小 KB
-#define LOG_FILE_PATH    "/mnt/hgfs/MyWork/github/API/build/"
+#define LOG_FILE_PATH    "/mnt/hgfs/MyWork/github/A_Linux_API/build/"
 #define LOG_FILE_NAME    LOG_FILE_PATH "log"
 
 pthread_mutex_t mutexlog = PTHREAD_MUTEX_INITIALIZER;
@@ -25,10 +25,9 @@ log_st *logs;
 
 static void log_checksize()  
 {  
-#define LOG_PATH_SIZE_ADD (LOG_PATH_SIZE+10) 
     struct stat stat_buf; 
-    char new_path[LOG_PATH_SIZE_ADD] = {0};  
-    char bak_path[LOG_PATH_SIZE_ADD] = {0};  
+    char new_path[LOG_PATH_SIZE] = {0};  
+    char bak_path[LOG_PATH_SIZE] = {0};  
 
     if(NULL == logs || 1 == logs->level || '\0' == logs->path[0]) 
         return;  
@@ -39,18 +38,18 @@ static void log_checksize()
         close(logs->fd);  
         if(logs->num) { 
             //snprintf(new_path, LOG_PATH_SIZE, "%s%d", logs->path, (int)time(NULL)); 
-            snprintf(bak_path, LOG_PATH_SIZE_ADD, "%s.%c", logs->path, logs->num+'A');
+            snprintf(bak_path, LOG_PATH_SIZE, "%s.%c", logs->path, logs->num+'A');
             remove(bak_path);
             for(int i=0; i<logs->num; i++)
             {
-                snprintf(bak_path, LOG_PATH_SIZE_ADD, "%s.%c", logs->path, 'A'+logs->num-i);  
-                snprintf(new_path, LOG_PATH_SIZE_ADD, "%s.%c", logs->path, 'A'+logs->num-i-1);   
+                snprintf(bak_path, LOG_PATH_SIZE, "%s.%c", logs->path, 'A'+logs->num-i);  
+                snprintf(new_path, LOG_PATH_SIZE, "%s.%c", logs->path, 'A'+logs->num-i-1);   
                 rename(new_path, bak_path);
             } 
         }
         else {  
-            snprintf(bak_path, LOG_PATH_SIZE_ADD, "%s.log.old", logs->path);  
-            snprintf(new_path, LOG_PATH_SIZE_ADD, "%s.log", logs->path);  
+            snprintf(bak_path, LOG_PATH_SIZE, "%s.log.old", logs->path);  
+            snprintf(new_path, LOG_PATH_SIZE, "%s.log", logs->path);  
             remove(bak_path);  
             rename(new_path, bak_path);
         }  
@@ -154,11 +153,14 @@ log_st *log_init()
 }
 
 
+
+
 // 测试程序
-int main()
+int main(int argc, char* argv[])
 {
     log_st *fd = log_init();
-    for(int i=0; i<100; i++)
-    log_debug("log init");
+    for(int i=0; i<100; i++){
+        log_debug("log init");
+    }
 }
  

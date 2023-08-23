@@ -59,10 +59,10 @@ int fun_mmap(int fd, long size, const char* data)
 }
 
 // mmap测试
-int test_mmap()
+int test_mmap(char* file)
 {
     const char *message = "Hello, mmap!";
-    const char *file_path = API_FILE_NAME;
+    const char *file_path = file;
 
     int fd = open(file_path, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if (fd == -1) 
@@ -75,12 +75,77 @@ int test_mmap()
     close(fd);
 }
 
+// 内存测试
+int  test_memory()
+{
+    // 使用malloc动态分配内存
+    int* arr1 = (int*)malloc(5 * sizeof(int));
+    if (arr1 == NULL) {
+        perror("malloc 内存分配失败:");
+        return 1;
+    }
 
+    // 使用calloc动态分配内存，并初始化为0
+    int* arr2 = (int*)calloc(5, sizeof(int));
+    if (arr2 == NULL) {
+        perror("calloc 内存分配失败:");
+        return 1;
+    }
+
+    // 对动态分配的内存进行写操作
+    for (int i = 0; i < 5; i++) {
+        arr1[i] = i + 1;
+        arr2[i] = i + 1;
+    }
+
+    // 输出数组内容
+    printf("arr1: ");
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", arr1[i]);
+    }
+    printf("\n");
+
+    printf("arr2: ");
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", arr2[i]);
+    }
+    printf("\n");
+
+    // 使用realloc重新调整分配内存的大小
+    int* arr3 = (int*)realloc(arr1, 10 * sizeof(int));
+    if (arr3 == NULL) {
+        perror("realloc:内存分配失败:");
+        return 1;
+    }
+
+    // 对重新分配的内存进行写操作
+    for (int i = 5; i < 10; i++) {
+        arr3[i] = i + 1;
+    }
+
+    // 输出重新分配后的数组内容
+    printf("arr3: ");
+    for (int i = 0; i < 10; i++) {
+        printf("%d ", arr3[i]);
+    }
+    printf("\n");
+
+    // 释放动态分配的内存
+    free(arr2);
+    free(arr3);
+    return 0;
+}
+
+
+
+
+#define API_DIR_PATH        "/mnt/hgfs/MyWork/github/A_Linux_API"           // 测试文件目录
+#define API_FILE_NAME       API_DIR_PATH "/build/" "file.txt" 
 
 // 测试例程
 int main(int argc, char* argv[]) 
 {
     printf("__[fun_mmap() test]__\n");
-    test_mmap();
+    test_mmap(API_FILE_NAME);
     return 0;
 }

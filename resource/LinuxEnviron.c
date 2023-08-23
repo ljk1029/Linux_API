@@ -9,7 +9,6 @@
 
 
 
-
 // getenv获取环境变量
 int fun_getenv(const char* path)
 {
@@ -99,7 +98,7 @@ int fun_showenv()
 
 
 
-// 测试例程
+// 环境测试例程
 int main(int argc, char* argv[])
 {
     printf("__[fun_getenv()  test]__\n");

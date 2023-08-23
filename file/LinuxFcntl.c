@@ -73,6 +73,10 @@ int fun_fcntl(int fd)
 
 
 
+
+#define API_DIR_PATH        "/mnt/hgfs/MyWork/github/A_Linux_API"           // 测试文件目录
+#define API_FILE_NAME       API_DIR_PATH "/build/" "file.txt" 
+
 // 测试例程
 int main(int argc, char* argv[]) 
 {
