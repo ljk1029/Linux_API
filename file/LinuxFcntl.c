@@ -9,7 +9,7 @@
 // 驱动命令
 int fun_ioctl(const char* dev, unsigned long cmd)
 {
-    int fd = -1;  
+    int fd =  -1;  
     int ret = -1; 
     int status = 0;
     const char* device = dev;
@@ -32,17 +32,36 @@ int fun_ioctl(const char* dev, unsigned long cmd)
 
     // 关闭设备文件
     close(fd);
-
     return 0;
 }
 
+// fcntl 文件锁
+int fun_fcntl_lock(int fd) 
+{
+    // 获取文件锁
+    struct flock lock;
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = 0;   // 开始行号
+    lock.l_len = 100;   // 行数长度
+    fcntl(fd, F_GETLK, &lock);
+
+    // 设置文件锁
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = 0;
+    lock.l_len = 100;
+    fcntl(fd, F_SETLK, &lock);
+    return 0;
+}
 
 // fcntl 添加文件属性
 int fun_fcntl(int fd) 
 {
     // 获取文件描述符的标志属性
     int flags = fcntl(fd, F_GETFL, 0);
-    if (flags < 0) {
+    if (flags < 0) 
+    {
         perror("Error getting file flags");
         close(fd);
         return 1;
@@ -50,9 +69,9 @@ int fun_fcntl(int fd)
 
     // 在标志属性中添加O_APPEND选项
     flags |= O_APPEND;
-
     // 设置文件描述符的标志属性
-    if (fcntl(fd, F_SETFL, flags) < 0) {
+    if (fcntl(fd, F_SETFL, flags) < 0) 
+    {
         perror("Error setting file flags");
         close(fd);
         return 1;
@@ -61,12 +80,12 @@ int fun_fcntl(int fd)
     // 读取文件内容并输出
     char buffer[100];
     ssize_t bytesRead = read(fd, buffer, sizeof(buffer));
-    if (bytesRead < 0) {
+    if (bytesRead < 0) 
+    {
         perror("Error reading file");
         close(fd);
         return 1;
     }
-
     printf("File content: %.*s\n", (int)bytesRead, buffer);
     return 0;
 }
@@ -74,13 +93,12 @@ int fun_fcntl(int fd)
 
 
 
-#define API_DIR_PATH        "/mnt/hgfs/MyWork/github/A_Linux_API"           // 测试文件目录
-#define API_FILE_NAME       API_DIR_PATH "/build/" "file.txt" 
+// 测试文件目录
+#define API_DIR_PATH     "/mnt/hgfs/MyWork/github/A_Linux_API"           
+#define API_FILE_NAME     API_DIR_PATH "/build/" "file.txt" 
 
-// 测试例程
-int main(int argc, char* argv[]) 
+int test_fcntl()
 {
-    printf("__[fun_fcntl() test]__\n");
     const char *file_path = API_FILE_NAME;
     // 打开一个文件并创建文件描述符
     int fd = open(file_path, O_RDWR | O_CREAT, 0644);
@@ -91,6 +109,14 @@ int main(int argc, char* argv[])
     fun_fcntl(fd);
     // 关闭文件描述符
     close(fd);
+}
+
+
+// 测试例程
+int main(int argc, char* argv[]) 
+{
+    printf("__[fun_fcntl() test]__\n");
+    test_fcntl();
 
     printf("__[fun_ioctl() test]__\n");
     return 0;

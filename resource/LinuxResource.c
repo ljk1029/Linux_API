@@ -2,7 +2,7 @@
  * 文件名: LinuxSyslog.c
  * 作者: ljk
  * 创建时间: 2023-07-31
- * 文件描述: syslog测试操作例程
+ * 文件描述: 资源获取测试操作例程
  */
 #include "../common.h"
 

@@ -2,13 +2,13 @@
  * 文件名: LinuxMmap.c
  * 作者: ljk
  * 创建时间: 2023-07-15
- * 文件描述: mmap测试
+ * 文件描述: 内存RAM测试
  */
 #include "../common.h"
 
 
 
-// 将文件映射到内存
+// 将文件映射到内存ARM
 int fun_mmap(int fd, long size, const char* data)
 {
     // 将文件扩展到指定大小
@@ -75,7 +75,7 @@ int test_mmap(char* file)
     close(fd);
 }
 
-// 内存测试
+// 内存开辟测试
 int  test_memory()
 {
     // 使用malloc动态分配内存

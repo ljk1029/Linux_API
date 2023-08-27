@@ -280,6 +280,7 @@ int Init_IPC()
     return 0;
 }
 
+
 // 删除共享内存
 int delect_SharedMemory(int shmid, char* shmaddr)
 {
@@ -313,6 +314,18 @@ int delect_SharedMemory(int shmid, char* shmaddr)
 
     return shmid;
 }
+
+// 创建键值，特定的IPC资源标识
+key_t create_Key(const char* path, int proj_id)
+{
+    // path任意目录, proj_id一个非负整数
+    if(path && proj_id>0){
+        key_t key = ftok(path, proj_id);
+        return key;
+    }
+    return -1;    
+}
+
 
 
 

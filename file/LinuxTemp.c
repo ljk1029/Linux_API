@@ -196,6 +196,8 @@ int fun_mkstemp()
 }
 
 
+
+// 测试例程
 int main(int argc, char* argv[])
 {
     printf("__[fun_tmpnam() test]__\n");

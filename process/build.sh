@@ -108,6 +108,10 @@ function build_IPC()
     build_part
     exe_name=LinuxIPC_SHMR
     build_part
+    exe_name=LinuxIPC_SMGS
+    build_part
+    exe_name=LinuxIPC_SMGR
+    build_part
 
     exe_name=LinuxIPC_SIGS
     build_part
@@ -136,6 +140,18 @@ function run_IPC_SHMT() {
 
 function run_IPC_SHMR() {
     exe_name=LinuxIPC_SHMR
+    echo "run $exe_name"
+    $out_path/$exe_name.o
+}
+
+function run_IPC_SMGS() {
+    exe_name=LinuxIPC_SMGS
+    echo "run $exe_name"
+    $out_path/$exe_name.o
+}
+
+function run_IPC_SMGR() {
+    exe_name=LinuxIPC_SMGR
     echo "run $exe_name"
     $out_path/$exe_name.o
 }
@@ -189,7 +205,8 @@ function usage() {
 	echo '18  run   IPC_SIGS'
 	echo '19  run   IPC_FIFOS'
 	echo '20  run   IPC_FIFOR'
-  
+    echo '21  run   IPC_SMGS'
+	echo '22  run   IPC_SMGR'
 }
 
 # main
@@ -236,7 +253,10 @@ else
         run_IPC_FIFOS
     elif [ $1 == '20' ];then
         run_IPC_FIFOR
-   
+    elif [ $1 == '21' ];then
+        run_IPC_SMGS
+    elif [ $1 == '22' ];then
+        run_IPC_SMGR
     else
         usage
     fi

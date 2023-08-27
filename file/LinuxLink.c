@@ -138,9 +138,9 @@ int fun_dir(const char *path)
 
 
 
-
-#define LINK_DIR_NAME       "/mnt/hgfs/MyWork/github/A_Linux_API/link_dir"  // 创建目录测试
-#define LINK_FILE_NAME      "link.txt"                              // 软连接测试
+// 创建目录测试 软连接测试
+#define LINK_DIR_NAME    "/mnt/hgfs/MyWork/github/A_Linux_API/link_dir"  
+#define LINK_FILE_NAME   "link.txt"                          
 
 // 测试例程
 int main(int argc, char* argv[])
@@ -159,7 +159,7 @@ int main(int argc, char* argv[])
 
     printf("__[fun_link() test]__\n");
     // 使用预处理指令 # 进行字符串拼接
-#define STRINGIFY(x,y) x#y
+    #define STRINGIFY(x,y) x#y
     const char *softpath = STRINGIFY(LINK_FILE_NAME, .softlink);
     const char *hardpath = STRINGIFY(LINK_FILE_NAME, .hardlink);
     fun_link(path, softpath, hardpath);

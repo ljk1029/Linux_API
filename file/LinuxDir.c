@@ -81,8 +81,8 @@ int fun_seekdir(char* target, char* path_dir)
 
 
 
-
-#define API_DIR_PATH        "/mnt/hgfs/MyWork/github/A_Linux_API" 
+// 测试文件目录
+#define API_DIR_PATH   "/mnt/hgfs/MyWork/github/A_Linux_API" 
 
 int main(int argc, char* argv[])
 {
