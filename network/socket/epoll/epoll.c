@@ -151,6 +151,22 @@ EXIT:
     return 0;
 }
 
+#include <signal.h>
+
+// 通过忽略这两个信号，可以在终端关闭或控制终端断开时继续运行进程，以及在向已关闭的管道或套接字写入时不会导致进程退出。
+void ignore_signal()
+{
+    //ignore SIGHUP and SIGPIPE
+    if (::signal(SIGHUP, SIG_IGN) == SIG_ERR)
+    {
+        error_log("signal ignore SIGHUP");
+    }
+    if (::signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+    {
+        error_log("signal ignore SIGPIPE");
+    }
+}
+
 // 客户端断掉，服务端收到长度为0的消息
 // 服务端断掉，客户端收到长度为0的消息
 int main() 
