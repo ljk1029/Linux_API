@@ -4,7 +4,12 @@
  * 创建时间: 2023-08-03
  * 文件描述: 线程操作例程
  */
-#include "../common.h"
+#include <sys/syscall.h> // 添加这行头文件以支持 syscall 函数和 SYS_gettid 常量
+#include <unistd.h>      // 添加这行头文件以支持 sleep 函数
+#include <stdlib.h>      // 添加这行头文件以支持 exit 函数
+#include <pthread.h>     // 添加这行头文件以支持 pthread 相关函数
+#include <stdio.h>
+#include "LinuxThread.h"
 
 /*
 * 1、线程创建必须有主线程回收或者自己分离式退出释放资源，不然最多创建32767个线程。
@@ -140,6 +145,10 @@ int fun_thread_set()
 {
     pthread_t threads;
 	pthread_attr_t attr;
+    size_t stack_size;
+    int detach_state;
+    int policy;
+    struct sched_param param;
     // 初始化线程属性对象
 	int ret = pthread_attr_init(&attr); 
 
@@ -173,7 +182,6 @@ int fun_thread_set()
     pthread_attr_getschedparam(&attr, &param);
     printf("线程的调度参数: %d\n", param.sched_priority);
 
-
     // 设置线程大小
     int stacksize = 1*1024*1024; 
 	if((ret = pthread_attr_setstacksize(&attr, stacksize)) != 0){
@@ -183,25 +191,42 @@ int fun_thread_set()
     if((ret = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) != 0){
 		printf("线程分离设置错误\n");
 	}
-	pthread_create(&threads,&attr,thread_function,NULL);
+	pthread_create(&threads,&attr, thread_function,NULL);
 	if((ret = pthread_attr_destroy(&attr)) != 0){
 		printf("线程属性销毁错误\n");
 	}
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+int function_print(char* name, void* callback)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
+
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_thread",      fun_thread);
+    function_print("fun_thread_self", fun_thread_self);
+    function_print("fun_thread_exit", fun_thread_exit);
+    function_print("fun_thread_set",  fun_thread_set);
+    return 0;
+}
 
 // 测试程序
 int main(int argc, char* argv[])
 {
-    printf("__[fun_thread()       test]__\n");
-    fun_thread();
-    printf("__[fun_thread_self()  test]__\n");
-    fun_thread_self();
-    printf("__[fun_thread_exit()  test]__\n");
-    fun_thread_exit();
-    printf("__[fun_thread_set()   test]__\n");
-    fun_thread_set();
-
+    main_test(argc, argv);
     return 0;
 }

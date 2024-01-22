@@ -4,8 +4,9 @@
  * 创建时间: 2023-07-25
  * 文件描述: 键盘输入操作例程
  */
-#include "../common.h"
-
+#include <termios.h>
+#include <stdio.h>
+#include <unistd.h>
 
 
 
@@ -86,8 +87,6 @@ int fun_keyboard()
     }
     return 0;
 }
-
-
 
 // 测试例程
 int main(int argc, char* argv[])

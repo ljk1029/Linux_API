@@ -4,7 +4,11 @@
  * 创建时间: 2023-07-15
  * 文件描述: fcntl
  */
-#include "../common.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include "LinuxFcntl.h"
 
 // 驱动命令
 int fun_ioctl(const char* dev, unsigned long cmd)
@@ -91,10 +95,8 @@ int fun_fcntl(int fd)
 }
 
 
-
-
 // 测试文件目录
-#define API_DIR_PATH     "/mnt/hgfs/MyWork/github/A_Linux_API"           
+#define API_DIR_PATH     ".."           
 #define API_FILE_NAME     API_DIR_PATH "/build/" "file.txt" 
 
 int test_fcntl()
@@ -111,14 +113,14 @@ int test_fcntl()
     close(fd);
 }
 
-
 // 测试例程
 int main(int argc, char* argv[]) 
 {
-    printf("__[fun_fcntl() test]__\n");
+    printf("{=====[fun_fcntl()] test start=====\n");
     test_fcntl();
+    printf("------[fun_fcntl()] test end-------}\n\n");
 
-    printf("__[fun_ioctl() test]__\n");
+    printf("{=====[fun_ioctl()] test start=====\n");
     return 0;
 }
 

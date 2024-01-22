@@ -4,7 +4,11 @@
  * 创建时间: 2023-07-23
  * 文件描述: 进程开启shell子进程例程
  */
-#include "../common.h"
+#include <stdlib.h> // 添加这行头文件以支持 system 函数
+#include <unistd.h> // 添加这行头文件以支持 exec 函数
+#include <string.h>
+#include <stdio.h>
+#include "LinuxProcessExe.h"
 
 
 
@@ -77,11 +81,12 @@ int fun_execvp()
 }
 
 
-
-// 测试程序
-int main(int argc, char* argv[])
+int main_test(int argc, char* argv[])
 {
-    printf("argc:%d, path:%s", argc, argv[0]);
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
     if(argc > 1)
     {
         printf(" commond:%s\n", argv[1]);
@@ -114,4 +119,13 @@ int main(int argc, char* argv[])
             fun_execvp();
         }
     }
+    return 0;
+}
+
+// 测试程序
+int main(int argc, char* argv[])
+{
+    printf("argc:%d, path:%s", argc, argv[0]);
+    main_test(argc, argv);
+    return 0;
 }

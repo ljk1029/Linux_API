@@ -4,7 +4,10 @@
  * 创建时间: 2023-07-15
  * 文件描述: 
  */
-#include "common.h"
+#include <unistd.h>
+#include <time.h>
+#include <stdio.h>
+#include "LinuxTime.h"
 
 
 
@@ -125,26 +128,45 @@ int fun_strtime()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback1)();
+typedef int(*FunctionCallback2)(int);
+int function_print(char* name, void* callback, int arg1)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    if(arg1 == 0){
+        FunctionCallback1 func = (FunctionCallback1)callback;
+        ret = func();
+    }
+    else{
+        FunctionCallback2 func = (FunctionCallback2)callback;
+        ret = func(arg1);
+    }
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
 
 
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_time",    fun_time, 0);
+    function_print("fun_difftime", fun_difftime, 1);
+    function_print("fun_gmtime",  fun_gmtime, 0);
+    function_print("fun_localtime", fun_localtime, 0);
+    function_print("fun_mktime",  fun_mktime, 0);
+    function_print("fun_astime",  fun_astime, 0);
+    function_print("fun_strtime", fun_strtime, 0);
+    return 0;
+}
 
 // 测试例程
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
-    printf("__[fun_time()      test]__\n");
-    fun_time();
-    printf("__[fun_difftime()  test]__\n");
-    fun_difftime(1);
-    printf("__[fun_gmtime()    test]__\n");
-    fun_gmtime();
-    printf("__[fun_localtime() test]__\n");
-    fun_localtime();
-    printf("__[fun_mktime()    test]__\n");
-    fun_mktime();
-    printf("__[fun_astime()    test]__\n");
-    fun_astime();
-    printf("__[fun_strtime()   test]__\n");
-    fun_strtime();
-   
+    main_test(argc, argv);
     return 0;
 }

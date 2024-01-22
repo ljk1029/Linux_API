@@ -4,8 +4,9 @@
  * 创建时间: 2023-08-01
  * 文件描述: 断言用法
  */
-
-#include "../common.h"
+#include <time.h>
+#include <unistd.h>
+#include <stdio.h>
 
 // 幂次方
 int power10(int s, int cnt)

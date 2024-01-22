@@ -4,7 +4,11 @@
  * 创建时间: 2023-07-31
  * 文件描述: 资源获取测试操作例程
  */
-#include "../common.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include "LinuxResource.h"
 
 
 // getpriority 获取进程或进程组的调度优先级
@@ -79,15 +83,34 @@ int fun_getrusage()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+int function_print(char* name, void* callback)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
 
 
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_getpriority", fun_getpriority);
+    function_print("fun_getrlimit", fun_getrlimit);
+    function_print("fun_getrusage", fun_getrusage);
+    return 0;
+}
+
+// 环境测试例程
 int main(int argc, char* argv[])
 {
-    printf("__[fun_getpriority() test]__\n");
-    fun_getpriority();
-    printf("__[fun_getrlimit()   test]__\n");
-    fun_getrlimit();
-    printf("__[fun_getrusage()   test]__\n");
-    fun_getrusage();
+    main_test(argc, argv);
     return 0;
 }

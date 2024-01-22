@@ -5,7 +5,10 @@
  * 文件描述: 文件读写操操作例程, C 标准库中
  */
 // strlen包括结束符，sizeof类型的长度，初学者尤其注意字符串指针计算的是指针长度
-#include "common.h"
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include "LinuxFile.h"
 
 
 
@@ -134,7 +137,6 @@ int fun_fputc()
     }
     fputc('\n', stdout);
 
-    
     // 使用putc() 逐字符输出标准输出
     printf("putc 输出字符:\n");
     if (putc(ch, stdout) == EOF) {
@@ -144,7 +146,9 @@ int fun_fputc()
 
     // 使用putchar() 逐字符输出标准输出
     printf("putchar 输出字符:\n");
-    putchar(ch);
+    if (putchar(ch) == EOF) {
+        perror("putchar");
+    }
     putchar('\n');
     
     return 0;
@@ -153,7 +157,7 @@ int fun_fputc()
 // fgets/puts字符串测试,也可以对文件进行操作
 int fun_fgets()
 {
-    char input[100];
+    char input[100]={0};
 
     printf("fgets请输入字符串:");
     fgets(input, sizeof(input), stdin);
@@ -238,39 +242,61 @@ int fun_fopenfd(const char* path)
 }
 
 // fgetpos fsetpos rewind freopen setvbuf remove
-int fun_fqx()
+int fun_preserve()
 {
+    printf("Preserve extension functions\n");
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)(void);
+typedef int(*FunctionCallback1)(const char*);
+typedef int(*FunctionCallback2)(const char*, const char*);
+
+int function_print(char* name, void* callback, const char* arg1, const char* arg2)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    if(arg1 == NULL){
+        FunctionCallback func = (FunctionCallback)callback;
+        ret = func();
+    }
+    else if(arg2 == NULL){
+        FunctionCallback1 func = (FunctionCallback1)callback;
+        ret = func(arg1);
+    }
+    else{
+        FunctionCallback2 func = (FunctionCallback2)callback;
+        ret = func(arg1, arg2);
+    }
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
 
 
 // 测试文件目录
-#define API_DIR_PATH     "/mnt/hgfs/MyWork/github/A_Linux_API"           
+#define API_DIR_PATH     ".."           
 #define API_FILE_NAME    API_DIR_PATH "/build/" "file.txt" 
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    const char* path = API_FILE_NAME;
+    const char* data = "Hello, World!";
+    function_print("fun_fwrite", fun_fwrite, path, data);
+    function_print("fun_fgetc",  fun_fgetc, NULL, NULL);
+    function_print("fun_fputc",  fun_fputc, NULL, NULL);
+    function_print("fun_fgets",  fun_fgets, NULL, NULL);
+    function_print("fun_print",  fun_print, NULL, NULL);
+    function_print("fun_fopenfd",  fun_fopenfd, path, NULL);
+    return 0;
+}
 
 int main(int argc, char* argv[])
 {
-    const char* path = API_FILE_NAME;
-    const char* data = "Hello, World!";
-#if 1
-    printf("__[fun_fwrite() test]__\n");
-    fun_fwrite(path, data);
-
-    printf("__[fun_fgetc() test]__\n");
-    fun_fgetc();
-
-    printf("__[fun_fputc() test]__\n");
-    fun_fputc();
-
-    printf("__[fun_fgets() test]__\n");
-    fun_fgets();
-
-    printf("__[fun_print() test]__\n");
-    fun_print();
-#endif
-    printf("__[fun_fopenfd() test]__\n");
-    fun_fopenfd(path);
-
+    main_test(argc, argv);
     return 0;
 }

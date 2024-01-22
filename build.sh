@@ -1,4 +1,3 @@
-
 #!/bin/bash
 # main build
 
@@ -17,28 +16,28 @@ function build_part() {
 }
 
 
-# main
+# build main
 function build_main() {
     exe_name=main
     build_part
 }
 
+# run main
 function run_main() {
     exe_name=main
     echo "run $exe_name"
     $out_path/$exe_name.o 
 }
 
-
-
+# usage
 function usage()
 {
-    echo "usage"
-    echo '1  build'
-	echo '2  run_main'
+    echo "usage: $0 [arg]"
+    echo 'arg: 1  build'
+	echo '     2  run_main'
 }
 
-# 攻击函数
+# 功能函数
 do_build() {
     case $type in
 		1)
@@ -54,6 +53,7 @@ do_build() {
 }
 
 
+# 执行
 if [ $# = 0 ]; then
     echo "no nothing"
     usage

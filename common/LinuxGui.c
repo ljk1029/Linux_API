@@ -4,8 +4,6 @@
  * 创建时间: 2023-08-01
  * 文件描述: 界面显示操作例程
  */
-#include "../common.h"
-
 // 需要安装工具libncurses-dev
 // gcc LinuxGui.c -lcurses
 #include <curses.h>

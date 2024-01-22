@@ -4,10 +4,16 @@
  * 创建时间: 2023-08-04
  * 文件描述: 信号操作例程
  */
-#include "common.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <stdio.h>
+#include <sys/wait.h>
+#include "LinuxSignal.h"
+
+
 
 static int exit_cnt = 0;
-
 void signal_handler(int signum)
 {
     printf("Recevice signal %d\n", signum);
@@ -194,24 +200,38 @@ int fun_sighandle()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+int function_print(char* name, void* callback)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
+
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_kill",      fun_kill);
+    function_print("fun_signal",    fun_signal);
+    function_print("fun_alarm",     fun_alarm);
+    function_print("fun_sigaction", fun_sigaction);
+    function_print("loop_exit",  loop_exit);
+    function_print("fun_sigset", fun_sigset);
+    function_print("fun_sighandle", fun_sighandle);
+    return 0;
+}
 
 // 测试程序
 int main(int argc, char* argv[])
 {
-    printf("__[fun_kill()   test]__\n");
-    fun_kill();
-    printf("__[fun_signal() test]__\n");
-    fun_signal();
-    printf("__[fun_alarm()  test]__\n");
-    fun_alarm();
-    printf("__[fun_sigaction()  test]__\n");
-    fun_sigaction();
-    loop_exit();
-
-    
-    printf("__[fun_signal_set() test]__\n");
-    fun_sigset();
-    printf("__[fun_signal_handle() test]__\n");
-    fun_sighandle();
+    main_test(argc, argv);
     return 0;
 }

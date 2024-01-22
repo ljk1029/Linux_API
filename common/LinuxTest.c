@@ -4,7 +4,7 @@
  * 创建时间: 2023-08-03
  * 文件描述: XXX操作例程
  */
-#include "../common.h"
+#include <stdio.h>
 #include "LinuxLog.h"
 #include "LinuxError.h"
 #include "LinuxCTime.h"
@@ -34,6 +34,5 @@ int main(int argc, char* argv[])
     delay_us(1000000);
     printf("delay 1000000000ns\n");
     delay_ns(1000000000);
-
     return 0;
 }

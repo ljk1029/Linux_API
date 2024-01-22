@@ -152,16 +152,21 @@ EXIT:
 }
 
 #include <signal.h>
+// 在文件开头添加此声明
+void error_log(const char *message)
+{
+    printf("Error message: %s\n", message);
+}
 
 // 通过忽略这两个信号，可以在终端关闭或控制终端断开时继续运行进程，以及在向已关闭的管道或套接字写入时不会导致进程退出。
 void ignore_signal()
 {
     //ignore SIGHUP and SIGPIPE
-    if (::signal(SIGHUP, SIG_IGN) == SIG_ERR)
+    if (signal(SIGHUP, SIG_IGN) == SIG_ERR)
     {
         error_log("signal ignore SIGHUP");
     }
-    if (::signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+    if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
     {
         error_log("signal ignore SIGPIPE");
     }

@@ -7,7 +7,7 @@ extern "C" {
 // 遍历文件
 int fun_finddir(char* dir, int depth);
 // 记录文件
-int fun_seekdir(char* target);
+int fun_seekdir(char* target, char* path_dir);
 
 #ifdef __cplusplus
 }

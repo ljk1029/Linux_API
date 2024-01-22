@@ -4,7 +4,14 @@
  * 创建时间: 2023-07-15
  * 文件描述: 内存RAM测试
  */
-#include "../common.h"
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "LinuxMemory.h"
 
 
 
@@ -136,16 +143,34 @@ int  test_memory()
     return 0;
 }
 
-
-
-
-#define API_DIR_PATH        "/mnt/hgfs/MyWork/github/A_Linux_API"           // 测试文件目录
-#define API_FILE_NAME       API_DIR_PATH "/build/" "file.txt" 
-
-// 测试例程
-int main(int argc, char* argv[]) 
+// 函数调试信息打印
+typedef int(*FunctionCallback1)(const char*);
+int function_print(char* name, void* callback, const char* arg1)
 {
-    printf("__[fun_mmap() test]__\n");
-    test_mmap(API_FILE_NAME);
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback1 func = (FunctionCallback1)callback;
+    ret = func(arg1);
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
+
+
+#define API_DIR_PATH        ".."           // 测试文件目录
+#define API_FILE_NAME       API_DIR_PATH "/build/" "file.txt" 
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("test_mmap", test_mmap, API_FILE_NAME);
+    return 0;
+}
+
+// 环境测试例程
+int main(int argc, char* argv[])
+{
+    main_test(argc, argv);
     return 0;
 }

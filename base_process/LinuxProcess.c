@@ -4,7 +4,12 @@
  * 创建时间: 2023-07-23
  * 文件描述: 进程操作例程
  */
-#include "../common.h"
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/syscall.h>
+#include <stdio.h>
+#include "LinuxProcess.h"
 
 
 
@@ -61,16 +66,33 @@ int fun_getID()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+int function_print(char* name, void* callback)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
 
 
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_fork",  fun_fork);
+    function_print("fun_getID", fun_getID);
+    return 0;
+}
 
 // 测试程序
 int main(int argc, char* argv[])
 {
-    printf("__[fun_fork()  test]__\n");
-    fun_fork();
-    printf("__[fun_getID() test]__\n");
-    fun_getID();
-
+    main_test(argc, argv);
     return 0;
 }

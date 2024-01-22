@@ -4,7 +4,15 @@
  * 创建时间: 2023-07-15
  * 文件描述: linux锁操作例程
  */
-#include "../common.h"
+#include <sys/mman.h>  
+#include <sys/types.h> 
+#include <semaphore.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <pthread.h>
+#include <stdio.h>
+#include "LinuxMutex.h"
 
 
 
@@ -48,7 +56,6 @@ int fun_filemutex(const char* path)
 }
 
 
-
 /**
  * 2、线程锁
 */
@@ -84,7 +91,6 @@ int unlock_Mutex()
     return 0;
 }
 
-
 // 测试用例
 int Number0 = 0;
 static void *FunCall1(void *Arg)
@@ -119,7 +125,7 @@ static void *FunCall2(void *Arg)
 }
 
 // 锁测试用例
-int fun_MutexTest(void)
+int fun_mutex(void)
 {
     pthread_t Id1, Id2;
     init_Mutex();
@@ -227,7 +233,6 @@ int fun_process_mutex()
         sleep(2);
         pthread_mutex_unlock(mutex);
         printf("Parent process unlocked the mutex.\n");
-
         wait(NULL);
     }
 
@@ -238,15 +243,35 @@ int fun_process_mutex()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+
+int function_print(char* name, void* callback)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
+
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_mutex", fun_mutex);
+    function_print("fun_sem",   fun_sem);
+    function_print("fun_process_mutex", fun_process_mutex);
+    return 0;
+}
 
 // 测试用例
 int main(int argc, char* argv[]) 
 {
-    printf("__[fun_MutexTest()     test]__\n");
-    fun_MutexTest();
-    printf("__[fun_sem()           test]__\n");
-    fun_sem();
-    printf("__[fun_process_mutex() test]__\n");
-    fun_process_mutex();
+    main_test(argc, argv);
     return 0;
 }

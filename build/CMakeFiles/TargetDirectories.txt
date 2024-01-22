@@ -1,4 +1,0 @@
-/root/VMCode/github/A_Linux_API/build/CMakeFiles/LinuxTime.dir
-/root/VMCode/github/A_Linux_API/build/CMakeFiles/LinuxTimeOS.dir
-/root/VMCode/github/A_Linux_API/build/CMakeFiles/edit_cache.dir
-/root/VMCode/github/A_Linux_API/build/CMakeFiles/rebuild_cache.dir

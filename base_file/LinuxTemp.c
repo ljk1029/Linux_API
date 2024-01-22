@@ -4,7 +4,12 @@
  * 创建时间: 2023-07-31
  * 文件描述: 临时文件操作例程
  */
-#include "../common.h"
+#include <unistd.h>
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "LinuxTemp.h"
 
 // 读写测试
 int fun_rwfile(FILE *fp)
@@ -195,25 +200,37 @@ int fun_mkstemp()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
 
+int function_print(char* name, void* callback)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
+
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_tmpnam",  fun_tmpnam);
+    function_print("fun_tmpfile", fun_tmpfile);
+    function_print("fun_mktemp",  fun_mktemp);
+    function_print("fun_mkdtemp", fun_mkdtemp);
+    function_print("fun_mkstemp", fun_mkstemp);
+    return 0;
+}
 
 // 测试例程
 int main(int argc, char* argv[])
 {
-    printf("__[fun_tmpnam() test]__\n");
-    fun_tmpnam();
-
-    printf("__[fun_tmpfile() test]__\n");
-    fun_tmpfile();
-
-    printf("__[fun_mktemp() test]__\n");
-    fun_mktemp();
-
-    printf("__[fun_mkdtemp() test]__\n");
-    fun_mkdtemp();
-
-    printf("__[fun_mkstemp() test]__\n");
-    fun_mkstemp();
-
+    main_test(argc, argv);
     return 0;
 }

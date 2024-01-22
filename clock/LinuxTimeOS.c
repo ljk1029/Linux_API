@@ -4,7 +4,11 @@
  * 创建时间: 2023-07-27
  * 文件描述: 
  */
-#include "common.h"
+#include <sys/time.h>
+#include <stdlib.h>
+//#include <time.h>
+#include <stdio.h>
+#include "LinuxTimeOS.h"
 
 
 
@@ -39,12 +43,33 @@ int fun_uptime()
     return 0;
 }
 
-// 测试例程
-int main(int argc, char* argv[]) 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+int function_print(char* name, void* callback)
 {
-    printf("__[fun_gettimeofday() test]__\n");
-    fun_gettimeofday();
-    printf("__[fun_uptime()       test]__\n");
-    fun_uptime();
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
+
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_gettimeofday",  fun_gettimeofday);
+    function_print("fun_uptime", fun_uptime);
+    return 0;
+}
+
+// 测试例程
+int main(int argc, char* argv[])
+{
+    main_test(argc, argv);
     return 0;
 }

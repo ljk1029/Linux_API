@@ -4,7 +4,8 @@
  * 创建时间: 2023-07-25
  * 文件描述: va_list用法
  */
-#include "../common.h"
+#include <stdarg.h>
+#include <stdio.h>
 #include "LinuxLog.h"
 
 

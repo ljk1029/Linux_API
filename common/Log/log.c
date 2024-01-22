@@ -17,7 +17,7 @@
 #define LOG_SAVEALLFILE     4
 #define LOG_BUF_SIZE     (1024*10)  // 每次写入最大数据量 byte
 #define LOG_FILE_SIZE    (1)     // 每个日志文件最大大小 KB
-#define LOG_FILE_PATH    "/mnt/hgfs/MyWork/github/A_Linux_API/build/"
+#define LOG_FILE_PATH    "../build/"
 #define LOG_FILE_NAME    LOG_FILE_PATH "log"
 
 pthread_mutex_t mutexlog = PTHREAD_MUTEX_INITIALIZER;
@@ -151,8 +151,6 @@ log_st *log_init()
     logs = _log_init(LOG_FILE_NAME, LOG_FILE_SIZE*500, printWrite, flieNum); // 1K * 100 & print file 2     
 	return logs;
 }
-
-
 
 
 // 测试程序

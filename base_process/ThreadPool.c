@@ -4,7 +4,10 @@
  * 创建时间: 2023-07-26
  * 文件描述: 线程池操作例程
  */
-#include "../common.h"
+#include <stdlib.h>
+#include <pthread.h>     
+#include <stdio.h>
+#include "ThreadPool.h"
 
 
 #define THREAD_POOL_SIZE 5

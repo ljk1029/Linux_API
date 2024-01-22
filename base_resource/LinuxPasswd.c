@@ -4,7 +4,11 @@
  * 创建时间: 2023-07-31
  * 文件描述: 用户信息操作例程
  */
-#include "../common.h"
+#include <unistd.h>
+#include <pwd.h>
+#include <sys/utsname.h>
+#include <stdio.h>
+#include "LinuxPasswd.h"
 
 
 
@@ -108,30 +112,45 @@ int fun_gethostid()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback1)();
+typedef int(*FunctionCallback2)(int, char*);
+int function_print(char* name, void* callback, int arg1, char* arg2)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    if(arg2 == NULL){
+        FunctionCallback1 func = (FunctionCallback1)callback;
+        ret = func();
+    }
+    else{
+        FunctionCallback2 func = (FunctionCallback2)callback;
+        ret = func(arg1, arg2);
+    }
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
 
-// 测试例程
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_getuid",   fun_getuid, 0, NULL);
+    function_print("fun_getlogin", fun_getlogin, 0, NULL);
+    function_print("fun_passwd",   fun_passwd, 1000, "root");
+    function_print("fun_getpwent", fun_getpwent, 0, NULL);
+    function_print("fun_gethostname", fun_gethostname, 0, NULL);
+    function_print("fun_uname",    fun_uname, 0, NULL);
+    function_print("fun_gethostid", fun_gethostid, 0, NULL);
+    return 0;
+}
+
+// 环境测试例程
 int main(int argc, char* argv[])
 {
-    printf("__[fun_getuid()      test]__\n");
-    fun_getuid();
-
-    printf("__[fun_getlogin()    test]__\n");
-    fun_getlogin();
-
-    printf("__[fun_passwd()      test]__\n");
-    fun_passwd(1000, "root");
-
-    printf("__[fun_getpwent()    test]__\n");
-    fun_getpwent();
-
-    printf("__[fun_gethostname() test]__\n");
-    fun_gethostname();
-
-    printf("__[fun_uname()       test]__\n");
-    fun_uname();
-
-    printf("__[fun_gethostid()   test]__\n");
-    fun_gethostid();
-    
+    main_test(argc, argv);
     return 0;
 }

@@ -4,7 +4,15 @@
  * 创建时间: 2023-07-15
  * 文件描述: 文件链接操作例程
  */
-#include "common.h"
+#include <unistd.h> 
+#include <stdlib.h>    // For NULL
+#include <stddef.h>    // For size_t and NULL
+#include <sys/stat.h>  // For struct stat and file-related functions
+#include <sys/types.h> // For uid_t, gid_t, and other types
+#include <fcntl.h>
+#include <stdio.h>
+#include <limits.h>
+#include "LinuxLink.h"
 
 
 // 建立测试文件
@@ -136,36 +144,90 @@ int fun_dir(const char *path)
 #endif
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback1)(const char*);
+typedef int(*FunctionCallback2)(const char*, unsigned int);
+typedef int(*FunctionCallback3)(const char*, unsigned int, unsigned int);
+typedef int(*FunctionCallback4)(const char*, const char*, const char*);
+typedef struct _arg_t{
+    unsigned int type;
+    const char* path;
+    const char* arg1;
+    const char* arg2;
+    unsigned int arg3;
+    unsigned int arg4;
+}arg_t;
+
+int function_print(char* name, void* callback, arg_t arg)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    if(arg.type == 1){
+        FunctionCallback1 func = (FunctionCallback1)callback;
+        ret = func(arg.path);
+    }
+    else if(arg.type == 2){
+        FunctionCallback2 func = (FunctionCallback2)callback;
+        ret = func(arg.path, arg.arg3);
+    }
+    else if(arg.type == 3){
+        FunctionCallback3 func = (FunctionCallback3)callback;
+        ret = func(arg.path, arg.arg3, arg.arg4);
+    }
+    else if(arg.type == 4){
+        FunctionCallback4 func = (FunctionCallback4)callback;
+        ret = func(arg.path, arg.arg1, arg.arg2);
+    }
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
 
 
 // 创建目录测试 软连接测试
-#define LINK_DIR_NAME    "/mnt/hgfs/MyWork/github/A_Linux_API/link_dir"  
-#define LINK_FILE_NAME   "link.txt"                          
+#define LINK_DIR_NAME    "../build/link_dir"  
+#define LINK_FILE_NAME   "link.txt"
+
+// 测试例程
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    const char *path = LINK_FILE_NAME; 
+    const char *dir  = LINK_DIR_NAME; 
+    arg_t arg = {
+        .path = path
+    };
+
+    arg.type = 1;
+    function_print("funEstablishFile", funEstablishFile, arg);
+
+    arg.type = 2;
+    arg.arg3 = 0644;
+    function_print("fun_chmod", fun_chmod, arg);
+
+    arg.type = 3;
+    arg.arg3 = 1001;
+    arg.arg3 = 1002;
+    function_print("fun_chown", fun_chown, arg);
+
+    // 使用预处理指令 # 进行字符串拼接
+    #define STRINGIFY(x,y) x#y
+    arg.type = 4;
+    arg.arg1 = STRINGIFY(LINK_FILE_NAME, .softlink);;
+    arg.arg2 = STRINGIFY(LINK_FILE_NAME, .hardlink);;
+    function_print("fun_link", fun_link, arg);
+
+    arg.type  = 1;
+    arg.path = dir;
+    function_print("fun_dir", fun_dir, arg);
+    return 0;
+}
 
 // 测试例程
 int main(int argc, char* argv[])
 {
-    const char *path = LINK_FILE_NAME; 
-    funEstablishFile(path);
-
-    printf("__[fun_chmod() test]__\n");
-    mode_t mode = 0644;
-    fun_chmod(path, mode);
-
-    printf("__[fun_chown() test]__\n");
-    uid_t owner = 1001;  
-    gid_t group = 1002;  
-    fun_chown(path, owner, group);
-
-    printf("__[fun_link() test]__\n");
-    // 使用预处理指令 # 进行字符串拼接
-    #define STRINGIFY(x,y) x#y
-    const char *softpath = STRINGIFY(LINK_FILE_NAME, .softlink);
-    const char *hardpath = STRINGIFY(LINK_FILE_NAME, .hardlink);
-    fun_link(path, softpath, hardpath);
-
-    printf("__[fun_dir() test]__\n");
-    fun_dir(LINK_DIR_NAME);
-
+    main_test(argc, argv);
     return 0;
 }

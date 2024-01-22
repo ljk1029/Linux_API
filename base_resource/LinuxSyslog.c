@@ -4,7 +4,9 @@
  * 创建时间: 2023-07-31
  * 文件描述: syslog测试操作例程
  */
-#include "../common.h"
+#include <syslog.h>
+#include <stdio.h>
+#include "LinuxSyslog.h"
 
 
 
@@ -42,12 +44,33 @@ int fun_setlogmask()
     return 0;
 }
 
-// 测试例程
-int main()
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+int function_print(char* name, void* callback)
 {
-    printf("__[fun_syslog()     test]__\n");
-    fun_syslog();
-    printf("__[fun_setlogmask() test]__\n");
-    fun_setlogmask();
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    FunctionCallback func = (FunctionCallback)callback;
+    ret = func();
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
+
+
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_syslog", fun_syslog);
+    function_print("fun_setlogmask", fun_setlogmask);
+    return 0;
+}
+
+// 环境测试例程
+int main(int argc, char* argv[])
+{
+    main_test(argc, argv);
     return 0;
 }

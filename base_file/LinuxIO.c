@@ -34,6 +34,7 @@ int fun_write(const char* path, const char* data)
     const char* file_data = data;
     int fd; 
 
+    printf("打开文件: %s\n", path);
     // 打开文件（如果不存在则创建），返回文件描述符
     fd = open(file_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fd == -1) {
@@ -71,6 +72,7 @@ int fun_read(const char* path)
     char buffer[256];
     int fd; 
      
+    printf("打开文件: %s\n", path);
     // 重新打开文件进行读取
     fd = open(file_path, O_RDONLY);
     if (fd == -1) {
@@ -115,7 +117,6 @@ int fun_lseek(const char* path)
         perror("lseek");
         exit(1);
     }
-
     printf("lseek: %lld\n", (long long)newOffset);
 
     // 关闭文件
@@ -188,12 +189,14 @@ int fun_dup(const char* path)
     return 0;
 }
 
+// 函数调试信息打印
 typedef int(*FunctionCallback1)(const char*);
 typedef int(*FunctionCallback2)(const char*, const char*);
 
-int function_print(void* callback, const char* arg1, const char* arg2)
+int function_print(char* name, void* callback, const char* arg1, const char* arg2)
 {
     int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
     if(arg2 == NULL){
         FunctionCallback1 func = (FunctionCallback1)callback;
         ret = func(arg1);
@@ -202,11 +205,9 @@ int function_print(void* callback, const char* arg1, const char* arg2)
         FunctionCallback2 func = (FunctionCallback2)callback;
         ret = func(arg1, arg2);
     }
+    printf("------[%s()] test end-------}\n\n", name);
     return ret;
 }
-
-
-
 
 
 // 测试文件目录
@@ -216,27 +217,18 @@ int function_print(void* callback, const char* arg1, const char* arg2)
 // 测试例程
 int main_test(int argc, char* argv[])
 {
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
     const char* path = API_FILE_NAME;
     const char* data = "Hello, World!";
-
-    printf("__[fun_write() test]__\n");
-    fun_write(path, data);
-
-    printf("__[fun_read() test]__\n");
-    fun_read(path);
-
-    printf("__[fun_lseek() test]__\n");
-    fun_lseek(path);
-
-    printf("__[fun_stat() test]__\n");
-    fun_stat(path);
-
-    printf("__[fun_dup() test]__\n");
-    fun_dup(path);
-
-    printf("__[fun_access() test]__\n");
-    fun_access(path);
-
+    function_print("fun_write", fun_write,   path, data);
+    function_print("fun_read",  fun_read,    path, NULL);
+    function_print("fun_lseek", fun_lseek,   path, NULL);
+    function_print("fun_stat",  fun_stat,    path, NULL);
+    function_print("fun_dup",   fun_dup,     path, NULL);
+    function_print("fun_access", fun_access, path, NULL);
     return 0;
 }
 

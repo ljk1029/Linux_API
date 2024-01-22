@@ -6,7 +6,10 @@
  */
 // 禁用 assert,必须放<assert.h>前
 #define NDEBUG
-#include "../common.h"
+#include <string.h> 
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
 #include "LinuxError.h"
 
 

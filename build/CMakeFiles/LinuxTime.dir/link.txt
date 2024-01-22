@@ -1,1 +1,0 @@
-/usr/bin/cc  -std=gnu99 -O0 -g CMakeFiles/LinuxTime.dir/clock/LinuxTime.c.o -o ../bin/LinuxTime 

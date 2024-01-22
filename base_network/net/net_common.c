@@ -67,12 +67,10 @@ void get_local_ip(char *if_name)
 }
 
 
-
 // 测试程序 
 int main()
 {
     char* netcard = "ens33";
-
     get_local_mac(netcard);
     get_local_ip(netcard);
     return 0;

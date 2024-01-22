@@ -4,7 +4,10 @@
  * 创建时间: 2023-07-25
  * 文件描述: 环境变量操作例程
  */
-#include "../common.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "LinuxEnviron.h"
 
 
 
@@ -95,19 +98,53 @@ int fun_showenv()
     return 0;
 }
 
+// 函数调试信息打印
+typedef int(*FunctionCallback)();
+typedef int(*FunctionCallback1)(const char*);
+typedef int(*FunctionCallback2)(const char*, const char*);
+typedef int(*FunctionCallback3)(const char*, const char*, int);
+int function_print(char* name, void* callback, const char* arg1, const char* arg2, int arg3)
+{
+    int ret = 0;
+    printf("{=====[%s()] test start=====\n", name);
+    if(arg1 == NULL){
+        FunctionCallback func = (FunctionCallback)callback;
+        ret = func();
+    }
+    else if(arg2 == NULL){
+        FunctionCallback1 func = (FunctionCallback1)callback;
+        ret = func(arg1);
+    }
+    else{
+        if(arg3 == 0){
+            FunctionCallback2 func = (FunctionCallback2)callback;
+            ret = func(arg1, arg2);
+        }else{
+            FunctionCallback3 func = (FunctionCallback3)callback;
+            ret = func(arg1, arg2, arg3);
+        }
+    }
+    printf("------[%s()] test end-------}\n\n", name);
+    return ret;
+}
 
 
+int main_test(int argc, char* argv[])
+{
+    printf("输入的命令行参数个数为: %d\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        printf("参数 %d: %s\n", i, argv[i]);
+    }
+    function_print("fun_getenv", fun_getenv, "HOME", NULL,  0);
+    function_print("fun_putenv", fun_putenv, "MY_VARIABLE", "hello",   0);
+    function_print("fun_setenv", fun_setenv, "MY_VARIABLE", "ni hao!", 1);
+    function_print("fun_showenv", fun_showenv, NULL, NULL, 0);
+    return 0;
+}
 
 // 环境测试例程
 int main(int argc, char* argv[])
 {
-    printf("__[fun_getenv()  test]__\n");
-    fun_getenv("HOME"); 
-    printf("__[fun_putenv()  test]__\n");
-    fun_putenv("MY_VARIABLE", "hello"); 
-    printf("__[fun_setenv()  test]__\n"); 
-    fun_setenv("MY_VARIABLE", "ni hao!", 1); 
-    printf("__[fun_showenv() test]__\n"); 
-    fun_showenv(); 
+    main_test(argc, argv);
     return 0;
 }
