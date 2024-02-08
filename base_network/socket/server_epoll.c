@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <sys/epoll.h>
-#include "../tcp/common.h"
+#include "common.h"
 
 
 

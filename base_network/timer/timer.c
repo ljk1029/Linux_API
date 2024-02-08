@@ -7,7 +7,7 @@
 #include <string.h>        // For strerror()
 #include <errno.h>
 
-int main() {
+int timer_poll(int cnt) {
     // 创建定时器
     int timerfd = timerfd_create(CLOCK_REALTIME, 0);
     if (timerfd == -1) {
@@ -18,7 +18,7 @@ int main() {
     // 设置定时器时间为5秒后超时
     struct itimerspec timerValue;
     memset(&timerValue, 0, sizeof(struct itimerspec));
-    timerValue.it_value.tv_sec = 5;     // 定时器5秒后到期
+    timerValue.it_value.tv_sec = cnt;     // 定时器5秒后到期
 
     if (timerfd_settime(timerfd, 0, &timerValue, NULL) == -1) {
         perror("timerfd_settime");
@@ -32,7 +32,7 @@ int main() {
     fds.events = POLLIN;
 
     // 等待定时器超时
-    printf("开始等待5秒...\n");
+    printf("开始等待%d秒...\n", cnt);
     int ret = poll(&fds, 1, -1); // 无限等待，直到定时器超时
     if (ret == -1) {
         perror("poll");
@@ -58,6 +58,11 @@ int main() {
 
     // 关闭文件描述符
     close(timerfd);
+    return 0;
+}
 
+// 测试dmeo
+int main() {
+    timer_poll(3);
     return 0;
 }

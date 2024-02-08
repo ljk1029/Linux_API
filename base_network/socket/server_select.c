@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <sys/select.h>
-#include "../tcp/common.h"
+#include "common.h"
 
 #ifdef MAX_CONNECT_CNT
 #define MAX_CONNECT_CNT_SELECT MAX_CONNECT_CNT

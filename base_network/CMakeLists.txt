@@ -16,50 +16,59 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g")
 
 set(TARGET1 "client")
 set(TARGET2 "server")
-set(TARGET3 "epoll")
-set(TARGET4 "select")
-set(TARGET5 "poll")
-set(TARGET6 "poll_thread")
-set(TARGET7 "udpserver")
-set(TARGET8 "udpclient")
+set(TARGET3 "server_epoll")
+set(TARGET4 "server_select")
+set(TARGET5 "server_poll")
+set(TARGET6 "server_poll_thread")
+set(TARGET7 "udp_server")
+set(TARGET8 "udp_client")
 set(TARGET9 "net_common")
+set(TARGET10 "timer")
 
 
 # clock 模块
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/socket/tcp) 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/socket) 
 
 add_executable(${TARGET1} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/tcp/${TARGET1}.c 
-) 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET1}.c 
+)
+target_link_libraries(${TARGET1} -lpthread)  
 add_executable(${TARGET2} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/tcp/${TARGET2}.c 
-) 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET2}.c 
+)
+target_link_libraries(${TARGET2} -lpthread) 
 add_executable(${TARGET3} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/epoll/${TARGET3}.c 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET3}.c 
 ) 
 add_executable(${TARGET4} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/select/${TARGET4}.c 
-) 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET4}.c 
+)
+target_link_libraries(${TARGET4} -lpthread)
 add_executable(${TARGET5} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/poll/${TARGET5}.c 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET5}.c 
 ) 
 add_executable(${TARGET6} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/poll/${TARGET6}.c 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET6}.c 
 ) 
+target_link_libraries(${TARGET6} -lpthread)
 add_executable(${TARGET7} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/udp/${TARGET7}.c 
-) 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET7}.c 
+)
 add_executable(${TARGET8} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket/udp/${TARGET8}.c 
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET8}.c 
 ) 
+target_link_libraries(${TARGET8} -lpthread) 
 add_executable(${TARGET9} 
     ${CMAKE_CURRENT_SOURCE_DIR}/net/${TARGET9}.c 
 ) 
 
+add_executable(${TARGET10} 
+    ${CMAKE_CURRENT_SOURCE_DIR}/timer/${TARGET10}.c 
+) 
 
 # cmake阶段设置输出路径
 set_target_properties(${TARGET1} ${TARGET2} ${TARGET3} ${TARGET4} ${TARGET5} ${TARGET6} 
-    ${TARGET7} ${TARGET8} ${TARGET9}
+    ${TARGET7} ${TARGET8} ${TARGET9} ${TARGET10}
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin)
 

@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <poll.h>
-#include "../tcp/common.h"
+#include "common.h"
 
 
 #ifdef MAX_CONNECT_CNT

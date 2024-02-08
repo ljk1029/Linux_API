@@ -12,7 +12,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <pthread.h>
-#include "../tcp/common.h"
+#include "common.h"
 
 
 

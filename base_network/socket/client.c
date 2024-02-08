@@ -2,7 +2,7 @@
  * 文件名: client.c
  * 作者: ljk
  * 创建时间: 2023-07-22
- * 文件描述: UDP通信客户端
+ * 文件描述: TCP通信客户端
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +11,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <pthread.h>
-#include "../tcp/common.h"
+#include "common.h"
 
 
 
@@ -19,47 +19,56 @@
 static int client_run_flag = 0;
 // 全局客户端通信描述符
 static int fd = 0;
-static struct sockaddr_in* serv_addr;
 
 // TCP client 连接
 static int tcpClient(char* ip, int port) 
 {
     int client_fd = -1;
-    struct sockaddr_in server_addr;
+    struct sockaddr_in serv_addr;
     char buffer[MAX_BUFFER_SIZE] = {0};
 
     // 创建套接字
-    if ((client_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printf("\n Socket creation error \n");
         goto EXIT;
     }
 
     // 设置服务器地址和端口号
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(port);
-    server_addr.sin_addr.s_addr = inet_addr(ip);
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port);
+    serv_addr.sin_addr.s_addr = inet_addr(ip);
+    bzero(&(serv_addr.sin_zero),sizeof(serv_addr.sin_zero));
+   
+    // 连接服务器
+    if (connect(client_fd, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in)) < 0) {
+        printf("\nConnection Failed \n");
+        goto EXIT;
+    }
 
     fd = client_fd;
     client_run_flag = 2;
-    serv_addr = &server_addr;
-    printf("UDP client is listening...\n");
     // 发送数据
     while (client_run_flag)
     {
-        // 客户端不用保存 服务端地址端口
-        ssize_t numbytes = udp_event_recv(client_fd, buffer, MAX_BUFFER_SIZE, NULL, NULL);
+        bzero(buffer, MAX_BUFFER_SIZE); 
+        ssize_t numbytes = event_recv(client_fd, buffer, MAX_BUFFER_SIZE);
+        
         if (numbytes <= 0)
         {  
-            fprintf(stderr,"UDP server close!\n");
+            fprintf(stderr,"TCP server close!\n");
+            //goto EXIT;
             exit(EXIT_FAILURE);
         } 
+
+        buffer[numbytes] = '\0'; 
+        //printf("fd:(%d) Received message: %s\n", client_fd, buffer);
     }
 
 EXIT:
-    fprintf(stdout, "UDP client exit\n");
+    fprintf(stdout, "TCP client exit\n");
     close(client_fd);
-    client_run_flag = 0;
     fd = -1; 
+    client_run_flag = 0;
     return 0;
 }
 
@@ -80,10 +89,12 @@ static int input_send()
     sleep(1);
     while(client_run_flag == 2)
     {
-        char msg[255];
-        scanf("%s", msg); 
+        char msg[100];
+        int len = 0;
+        scanf("%s",msg); 
+        len = strlen(msg);
         //sent to the server
-        size_t ret = udp_event_send(fd, (const void *)msg, strlen(msg), serv_addr, sizeof(struct sockaddr_in));
+        event_send(fd, (const void *)msg, len);
     }
     return 0;
 }
@@ -93,11 +104,7 @@ int main()
 {
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, thread_handle_Client, NULL);
-    for(;;)
-    {
-        input_send();
-        //sleep(10);
-    }
+    input_send();
 
     return 0;
 }

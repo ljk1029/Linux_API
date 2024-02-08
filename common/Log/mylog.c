@@ -10,7 +10,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <pthread.h>
-#include "log.h"
+#include "mylog.h"
 
 #define LOG_PRINT_MODE      1
 #define LOG_WRITE_MODE      1
