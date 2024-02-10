@@ -10,7 +10,6 @@ void get_win() {
         perror("ioctl");
         return 1;
     }
-
     printf("窗口大小：宽 %d, 高 %d\n", ws.ws_col, ws.ws_row);
 }
 

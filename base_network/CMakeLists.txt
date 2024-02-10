@@ -26,7 +26,7 @@ set(TARGET9 "net_common")
 set(TARGET10 "timer")
 
 
-# clock 模块
+# 头文件
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/socket) 
 
 add_executable(${TARGET1} 
@@ -57,7 +57,8 @@ add_executable(${TARGET7}
 add_executable(${TARGET8} 
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/${TARGET8}.c 
 ) 
-target_link_libraries(${TARGET8} -lpthread) 
+target_link_libraries(${TARGET8} -lpthread)
+ 
 add_executable(${TARGET9} 
     ${CMAKE_CURRENT_SOURCE_DIR}/net/${TARGET9}.c 
 ) 
