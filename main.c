@@ -9,24 +9,21 @@
 
 #define LINUX_VERSION_MAJOR   "1"
 #define LINUX_VERSION_MINOR   "0"
-#define LINUX_VERSION_PATCH   "3"
+#define LINUX_VERSION_PATCH   "5"
 #define LINUX_API_VERSION   "API V" LINUX_VERSION_MAJOR "." LINUX_VERSION_MINOR "." LINUX_VERSION_PATCH
 
 
 // Xxx功能
-int fun_Xxx()
-{
+int fun_Xxx() {
     return 0;
 }
 
-char* getVersion()
-{
+char* getVersion() {
     return LINUX_API_VERSION;
 }
 
 // 测试用例
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     printf("version:%s\n", getVersion());
     return  0;
 }
