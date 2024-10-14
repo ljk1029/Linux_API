@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
-#include "LinuxGetopt.h"
+#include "linux_getopt.h"
 
 /*
 #include <unistd.h>
@@ -39,8 +39,7 @@ getopt_long_only 可以混合
 
 // getopt 
 // 测试用例 短选项./a.out -a -b option_value
-int fun_getopt(int argc, char* argv[])
-{
+int api_getopt(int argc, char* argv[]) {
     int opt;
     int option_a = 0;
     char *option_b = NULL;
@@ -79,8 +78,7 @@ int fun_getopt(int argc, char* argv[])
 
 // getopt_long  
 // 测试用例 ./a.out -a  --option_b=value
-int fun_getopt_long(int argc, char* argv[])
-{
+int api_getopt_long(int argc, char* argv[]) {
     int opt;
     int option_a = 0;
     char *option_b = NULL;
@@ -123,8 +121,7 @@ int fun_getopt_long(int argc, char* argv[])
 
 // getopt_long_only  
 // 测试用例 ./a.out -b vlua 或 ./a.out --option_b=vlua
-int fun_getopt_long_only(int argc, char* argv[])
-{
+int api_getopt_long_only(int argc, char* argv[]) {
     int opt;
     int option_a = 0;
     char* option_b = NULL;
@@ -166,12 +163,15 @@ int fun_getopt_long_only(int argc, char* argv[])
 }
 
 // 使用打印
-int function_usage()
-{
+int function_usage(int argc, char* argv[]) {
     printf(" usage function \n \
     ./LinuxGetopt 短选项:-a -b option_value\n \
     ./LinuxGetopt 长选项:-a --option_b=value\n \
     ./LinuxGetopt 短选项:-b value 或 长选项:./LinuxGetopt --option_b=value\n");
+    printf("输入的命令行参数个数为: %d\n", argc); 
+    for (int i = 0; i < argc; ++i) { 
+        printf("参数 %d: %s\n", i, argv[i]); 
+    }
     return 0;
 }
 
@@ -179,17 +179,13 @@ int function_usage()
 // 测试文件目录
 int main_test(int argc, char* argv[])
 {
-    function_usage();
-    printf("输入的命令行参数个数为: %d\n", argc);
-    for (int i = 0; i < argc; ++i) {
-        printf("参数 %d: %s\n", i, argv[i]);
-    }
+    function_usage(argc, argv);
 #if 0
-    fun_getopt(argc, argv);
+    api_getopt(argc, argv);
 #elif 1
-    fun_getopt_long(argc, argv);
+    api_getopt_long(argc, argv);
 #else
-    fun_getopt_long_only(argc, argv);
+    api_getopt_long_only(argc, argv);
 #endif
     return 0;
 }

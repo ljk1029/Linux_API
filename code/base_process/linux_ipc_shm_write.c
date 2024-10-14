@@ -17,38 +17,13 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <pthread.h>
-#include "LinuxIPC.h"
+#include "linux_ipc_shm.h"
 
 
-#define IDPS_PROCESS_PATH   "/home/ljk/MyWork/github/API/build"
-#define IDPS_PROCESS_NAME   "LinuxIPCSR.o"
-#define IDPS_PROCESS_EXE    IDPS_PROCESS_PATH "/" IDPS_PROCESS_NAME
 
 
-// 共享内存读写数据大小
-#define SHM_SIZE  (1024)
-#define MEM_SIZE  (2*SHM_SIZE+12+2)
 
-
-// 进程间通信结构体
-typedef struct _IPC_Shared_Str
-{
-    char runFlag;     // 0:停止状态/从退出后设置0, 1:主要求从运行, 2(非0,1):主要求从停止, 优先级最高
-    char masterTR;    // 0:主写数据，非0:从读数据
-    char slaveTR;     // 0:从写数据，非0:主读数据
-    char dataType;    // 0:注册协商, 1:拉取配置, 2(非0,1)通信数据
-    int  dataLen;
-    char data[SHM_SIZE];
-    char readType;
-    int  readLen;
-    char read[SHM_SIZE];
-}IPC_Shared_Str;
 static IPC_Shared_Str* pSharedMemory = NULL;
-
-
-
-
-
 
 // 通知IPC启动
 int start_IPC()
@@ -190,6 +165,10 @@ void* startIPC_SubProcess(void* arg)
     pid_t pid = fork();
     if (pid == 0) // 子进程，启动IPC进程
     {
+        char cwd_path[1024];
+        // 获取当前工作目录
+        getcwd(cwd_path, 1024);
+        log_debug("Current working directory: %s\n", cwd_path);
         execl(IDPS_PROCESS_EXE, IDPS_PROCESS_NAME, NULL);
         log_debug("[ME] IPC SubProcess execl failed\n");
         exit(EXIT_FAILURE);

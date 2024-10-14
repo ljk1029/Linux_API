@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <pthread.h>     
 #include <stdio.h>
-#include "ThreadPool.h"
+#include "threadpool.h"
 
 
 #define THREAD_POOL_SIZE 5

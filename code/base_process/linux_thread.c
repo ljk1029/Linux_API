@@ -9,7 +9,7 @@
 #include <stdlib.h>      // 添加这行头文件以支持 exit 函数
 #include <pthread.h>     // 添加这行头文件以支持 pthread 相关函数
 #include <stdio.h>
-#include "LinuxThread.h"
+#include "linux_thread.h"
 
 /*
 * 1、线程创建必须有主线程回收或者自己分离式退出释放资源，不然最多创建32767个线程。

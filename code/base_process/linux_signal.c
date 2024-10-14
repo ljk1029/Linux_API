@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <sys/wait.h>
-#include "LinuxSignal.h"
+#include "linux_signal.h"
 
 
 

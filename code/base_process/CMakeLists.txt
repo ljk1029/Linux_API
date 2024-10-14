@@ -13,82 +13,32 @@ set(CURRENT_DIR ${CMAKE_SOURCE_DIR})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99") 
 #生成gdb的调试信息和不进行代码优化 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g") 
+# 输出路径
+set(TARGET_OUTPUT ${CMAKE_SOURCE_DIR}/bin)
+set(TARGETS  "linux_getopt" 
+             "linux_ipc_fifo_read" "linux_ipc_fifo_write" 
+             "linux_ipc_shm_read"  "linux_ipc_shm_write" 
+             "linux_ipc_smg_read"  "linux_ipc_smg_write" 
+             "linux_ipc_pipe" 
+             "linux_process"       "linux_process_exe" 
+             "linux_thread_mutex"  "linux_signal")
 
-set(TARGET1 "LinuxGetopt")
-set(TARGET2 "LinuxIPC_FIFOR")
-set(TARGET3 "LinuxIPC_FIFOS")
-set(TARGET4 "LinuxIPC_SHMR")
-set(TARGET5 "LinuxIPC_SHMT")
-set(TARGET6 "LinuxIPC_SMGR")
-set(TARGET7 "LinuxIPC_SMGS")
-set(TARGET8 "LinuxIPC")
-set(TARGET9 "LinuxMutex")
-set(TARGET10 "LinuxProcess")
-set(TARGET11 "LinuxProcessExe")
-set(TARGET12 "LinuxSignal")
-set(TARGET13 "LinuxThread")
+# 包含头文件
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
 
+# 添加执行文件
+foreach(TARGET ${TARGETS})
+    add_executable(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
+endforeach()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/) 
+# cmake阶段设置输出路径
+set_target_properties(${TARGETS}
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${TARGET_OUTPUT})
 
-add_executable(${TARGET1} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET1}.c 
-) 
-add_executable(${TARGET2} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET2}.c 
-) 
-add_executable(${TARGET3} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET3}.c 
-) 
-add_executable(${TARGET4} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET4}.c 
-) 
-add_executable(${TARGET5} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET5}.c 
-) 
-add_executable(${TARGET6} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET6}.c 
-) 
-add_executable(${TARGET7} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET7}.c 
-) 
-add_executable(${TARGET8} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET8}.c 
-) 
-add_executable(${TARGET9} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET9}.c 
-) 
-add_executable(${TARGET10} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET10}.c 
-) 
-add_executable(${TARGET11} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET11}.c 
-) 
-add_executable(${TARGET12} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET12}.c 
-) 
-add_executable(${TARGET13} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET13}.c 
-) 
-target_link_libraries(${TARGET13} 
+target_link_libraries(linux_thread_mutex 
     -lpthread
 )  
 
-# cmake阶段设置输出路径
-set_target_properties(${TARGET1} ${TARGET2} ${TARGET3} ${TARGET4} ${TARGET5} ${TARGET6} 
-    ${TARGET7} ${TARGET8} ${TARGET9} ${TARGET10} ${TARGET11} ${TARGET12} ${TARGET13}
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin)
-
-# 生成执行文件阶段放入可执行目录
-#install(TARGETS  ${TARGET1} ${TARGET2} ${TARGET3} ${TARGET4} ${TARGET5} ${TARGET6}
-#    RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-
-
-
-
-
-
-
-
-
+# 安装目标
+#install(TARGETS ${TARGETS}    RUNTIME DESTINATION ${TARGET_OUTPUT})

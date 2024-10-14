@@ -49,7 +49,7 @@ int get_pid_by_name(const char *process_name)
 
 int main(int argc, char* argv[]) 
 {
-    pid_t receiver_pid = get_pid_by_name("LinuxIPC_SIGR.o");  // 替换为接收方进程的实际PID
+    pid_t receiver_pid = get_pid_by_name("linux_ipc_sig_read");  // 替换为接收方进程的实际PID
     int signal_number = SIGUSR1; // 使用SIGUSR1信号作为示例
 
     if(receiver_pid)

@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/syscall.h>
 #include <stdio.h>
-#include "LinuxProcess.h"
+#include "linux_process.h"
 
 
 

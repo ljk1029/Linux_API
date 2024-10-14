@@ -5,9 +5,9 @@ extern "C" {
 #endif
 
 // 驱动命令
-int fun_ioctl(const char* dev, unsigned long cmd);
+int api_ioctl(const char* dev, unsigned long cmd);
 // fcntl 添加文件属性
-int fun_fcntl(int fd);
+int api_fcntl(int fd, int cmd, ...);
 
 #ifdef __cplusplus
 }

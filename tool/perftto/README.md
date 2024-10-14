@@ -8,7 +8,7 @@ https://perfetto.dev/docs/quickstart/linux-tracing
 使用说明
 
 ```console
-获取代码
+# 获取代码
 git clone https://android.googlesource.com/platform/external/perfetto/ && cd perfetto  
 
 # 进入工具目录

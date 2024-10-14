@@ -12,9 +12,9 @@
 
 
 
+
 // 进程间管道通信
-int fun_pipe()
-{
+int api_pipe() {
     int pipefd[2];
     pid_t pid;
     char  buffer[255];
@@ -60,16 +60,9 @@ int fun_pipe()
     return 0;
 }
 
-// 进程间通信
-int fun_FIFO()
-{
-    return 0;
-}
-
 // 测试例程
 int main(int argc, char* argv[])
 {
-    printf("__[fun_pip()  test]__\n");
-    fun_pipe();
+    api_pipe();
     return 0;
 }

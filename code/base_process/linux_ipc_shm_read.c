@@ -11,29 +11,13 @@
 #include <sys/shm.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "LinuxIPC.h"
+#include "linux_ipc_shm.h"
 
 
-// 读写数据大小
-#define SHM_SIZE  (1024)
-#define MEM_SIZE  (2*SHM_SIZE+12+2)
 
-// 进程间通信结构体
-typedef struct _IPC_Shared_Str
-{
-    char runFlag;     // 0:停止状态/从退出后设置0, 1:主要求从运行, 2(非0,1):主要求从停止, 优先级最高
-    char masterTR;    // 0:主写数据，非0:从读数据
-    char slaveTR;     // 0:从写数据，非0:主读数据
-    char dataType;    // 0:注册协商, 1:拉取配置, 2(非0,1)通信数据
-    int  dataLen;
-    char data[SHM_SIZE];
-    char readType;
-    int  readLen;
-    char read[SHM_SIZE];
-}IPC_Shared_Str;
+
+
 static IPC_Shared_Str* pSharedMemory = NULL;
-
-
 
 // 往tsp发送数据
 int write_IPC(char* data, int len, char type)
@@ -128,7 +112,6 @@ int read_repeat(char* data, int *len, char *type, int cnt, int time)
     }
     return true;
 }
-
 
 // 防止多开多开,进程如果退出也会自己释放文件锁。
 #include <fcntl.h>
