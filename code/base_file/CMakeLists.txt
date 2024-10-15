@@ -15,8 +15,13 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g") 
 # 输出路径
 set(TARGET_OUTPUT ${CMAKE_SOURCE_DIR}/bin)
-set(TARGETS  "linux_fd" "linux_file" "linux_dir" "linux_link" "linux_temp"
-    "linux_dev")
+set(TARGETS  "linux_fd" 
+    "linux_file" 
+    "linux_dir" 
+    "linux_link" 
+    "linux_temp"
+    "linux_dev"
+)
 
 # 包含头文件
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)

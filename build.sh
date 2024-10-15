@@ -1,63 +1,68 @@
 #!/bin/bash
-# main build
 
-exe_name=""
-out_path=./build
+# 使用说明
+usage() {
+    echo "Usage: $0 {b|r|clean}"
+    echo "  b     - 建立项目"
+    echo "  r     - 重新建立项目"
+    echo "  clean - 清空项目"
+    exit 1
+}
 
-# 构建
-function build_part() {
-    echo "build $exe_name"
-    rm $out_path/$exe_name.o 
-    gcc  $exe_name.c  -I ../ -g -o $exe_name.o -lpthread
-    if [ ! -d "$out_path" ]; then
-        mkdir $out_path
+# 创建或清空 build 目录
+prepare_build_dir() {
+    if [ -d "build" ]; then
+        echo "清空 build 目录"
+        rm -rf build/*
+        rm -rf bin/*
+    else
+        echo "创建 build 目录"
+        mkdir build
     fi
-    mv $exe_name.o $out_path/
 }
 
-
-# build main
-function build_main() {
-    exe_name=main
-    build_part
+# 建立项目
+build_project() {
+    prepare_build_dir
+    cd build || exit
+    cmake ..
+    make
 }
 
-# run main
-function run_main() {
-    exe_name=main
-    echo "run $exe_name"
-    $out_path/$exe_name.o 
+# 清空项目
+clean_project() {
+    if [ -d "build" ]; then
+        echo "清空 build 目录"
+        rm -rf build/*
+        rm -rf bin/*
+    else
+        echo "build 目录不存在"
+    fi
 }
 
-# usage
-function usage()
-{
-    echo "usage: $0 [arg]"
-    echo 'arg: 1  build'
-	echo '     2  run_main'
+# 重新建立项目
+rebuild_project() {
+    clean_project
+    build_project
 }
 
-# 功能函数
-do_build() {
-    case $type in
-		1)
-			build_main
-			;;
-		2)
-			run_main
-			;;
-		*)
-            usage
-            ;;
-    esac
-}
-
-
-# 执行
-if [ $# = 0 ]; then
-    echo "no nothing"
+# 检查输入参数
+if [ $# -eq 0 ]; then
     usage
-else
-    type=$1
-    do_build
 fi
+
+# 根据输入参数执行相应操作
+case "$1" in
+    b)
+        build_project
+        ;;
+    r)
+        rebuild_project
+        ;;
+    clean)
+        clean_project
+        ;;
+    *)
+        usage
+        ;;
+esac

@@ -1,6 +1,10 @@
 #ifndef  _COMMON_5767_H__
 #define  _COMMON_5767_H__
-#define LINUX_MAIN_API_TEST       // 单独测试开关
+
+#define LINUX_VERSION_MAJOR   "1"
+#define LINUX_VERSION_MINOR   "0"
+#define LINUX_VERSION_PATCH   "6"
+#define LINUX_API_VERSION   "API V" LINUX_VERSION_MAJOR "." LINUX_VERSION_MINOR "." LINUX_VERSION_PATCH
 
 #ifdef __cplusplus
 extern "C" {

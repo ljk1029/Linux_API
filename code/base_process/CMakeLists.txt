@@ -31,14 +31,15 @@ foreach(TARGET ${TARGETS})
     add_executable(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}.c)
 endforeach()
 
+# 链接动态库
+target_link_libraries(linux_thread_mutex 
+    -lpthread
+)  
+
 # cmake阶段设置输出路径
 set_target_properties(${TARGETS}
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${TARGET_OUTPUT})
-
-target_link_libraries(linux_thread_mutex 
-    -lpthread
-)  
 
 # 安装目标
 #install(TARGETS ${TARGETS}    RUNTIME DESTINATION ${TARGET_OUTPUT})

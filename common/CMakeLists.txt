@@ -17,8 +17,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g")
 set(TARGET1 "LinuxTest")
 set(TARGET2 "LinuxGui")
 set(TARGET3 "LinuxKey")
-set(TARGET4 "Log")
-
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/) 
 
@@ -28,22 +26,24 @@ add_executable(${TARGET1}
     ${CMAKE_CURRENT_SOURCE_DIR}/LinuxCTime.c 
     ${CMAKE_CURRENT_SOURCE_DIR}/LinuxLog.c 
 ) 
+
 add_executable(${TARGET2} 
     ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET2}.c 
 ) 
 target_link_libraries(${TARGET2}
     -lcurses 
 ) 
+
 add_executable(${TARGET3} 
     ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET3}.c 
 ) 
-add_executable(${TARGET4} 
-    ${CMAKE_CURRENT_SOURCE_DIR}/log/${TARGET4}.c 
-) 
 
 # cmake阶段设置输出路径
-set_target_properties(${TARGET1} ${TARGET2} ${TARGET3} ${TARGET4} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin)
+set_target_properties(
+    ${TARGET1} ${TARGET2} ${TARGET3} 
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
+)
 
 
 

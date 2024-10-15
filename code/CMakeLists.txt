@@ -24,21 +24,24 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g")
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR}/) 
 
 # 生成可执行文件
-#add_executable(myapp ${CMAKE_CURRENT_SOURCE_DIR}/main.c ) 
+#add_executable(threadpool ${CMAKE_CURRENT_SOURCE_DIR}/threadpool.c ) 
+#add_executable(threadpool_manager ${CMAKE_CURRENT_SOURCE_DIR}/threadpool_manager.c ) 
 
 # 链接我们需要的库
-#target_link_libraries(myapp       -lpthread) 
+#target_link_libraries(threadpool_manager -lpthread) 
 
 # 设置输出路径
-#set_target_properties(myapp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-
+#set_target_properties(threadpool  threadpool_manager
+#    PROPERTIES 
+#    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 # 添加子目录，包含 gtest 的构建
 add_subdirectory(base_file)
 add_subdirectory(base_process)
-#add_subdirectory(base_resource)
-#add_subdirectory(base_network)
-#add_subdirectory(clock)
+add_subdirectory(base_resource)
+add_subdirectory(base_network)
+add_subdirectory(clock)
+add_subdirectory(tiny)
 
 
 

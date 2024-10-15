@@ -4,6 +4,7 @@ project(app_demo)
 
 # 添加子目录
 add_subdirectory(code)
+add_subdirectory(common)
 
 
 

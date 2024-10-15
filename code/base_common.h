@@ -29,6 +29,7 @@
 #define MKD_DIR_NAME     API_DIR_PATH  "build_dir"  // 创建目录测试 
 #define LINK_FILE_NAME   API_DIR_PATH  "link"       // 软连接测试
 #define DEV_FILE_NAME    API_DIR_PATH  "file.txt"   
+#define MEM_FILE_NAME    API_DIR_PATH  "file.txt" 
 
 // 定义宏来打印命令行参数
 #define PRINT_CMD_ARGS(argc, argv) \
